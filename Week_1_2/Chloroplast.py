@@ -62,5 +62,5 @@ if __name__ == "__main__":
                 print (res)
                 print (demo)
 
-        except Exception:
+        except ValueError:
             print ('\n=== That is not a valid choice.')

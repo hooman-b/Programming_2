@@ -9,8 +9,8 @@ from exceptions import NotIsotope
 class Atom():
     """
     type: class
-    explanation: this class contains three attributes and one initializer, three instance methods,
-                 and five rich comparison methods. Each instance method returnsa feature of the 
+    explanation: this class contains three attributes, one initializer, three instance methods,
+                 and five rich comparison methods. Each instance method returns a feature of the 
                  object and each rich comparison method reintroduces the concept of each logical
                  statement.
     """
@@ -128,7 +128,7 @@ class Atom():
     @staticmethod
     def isotope_checker(proton_number1, proton_number2):
         """
-        type: instance method
+        type: static method
         input: 1- proton_number1: is the proton number of the first Atom object
                2- proton_number2: is the proton number of the second Atom object
         explanation: this function check whether two Atom objects are isotope or raise NotIsotope
@@ -138,6 +138,8 @@ class Atom():
             raise NotIsotope(proton_number1, proton_number2)
 
 if __name__ == "__main__":
+
+    # Evaluation part
     protium = Atom('H', 1, 1)
     deuterium = Atom('H', 1, 2)
     oxygen = Atom('O', 8, 8)

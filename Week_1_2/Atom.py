@@ -39,7 +39,7 @@ class Atom():
         """
 
         # Check whether these two atom objects are isotopes
-        self.isotope_checker(self.atomic_number, other.atomic_number)
+        self.isotope_checker(other.atomic_number)
         return self.neutron_number < other.neutron_number
 
     def __le__(self, other):
@@ -52,7 +52,7 @@ class Atom():
         output: 1- True/False
         """
         # Check whether these two atom objects are isotopes
-        self.isotope_checker(self.atomic_number, other.atomic_number)
+        self.isotope_checker(other.atomic_number)
         return self.neutron_number <= other.neutron_number
 
     def __gt__(self, other):
@@ -66,7 +66,7 @@ class Atom():
         """
 
         # Check whether these two atom objects are isotopes
-        self.isotope_checker(self.atomic_number, other.atomic_number)
+        self.isotope_checker(other.atomic_number)
         return self.neutron_number > other.neutron_number
 
     def __ge__(self, other):
@@ -80,7 +80,7 @@ class Atom():
         """
 
         # Check whether these two atom objects are isotopes
-        self.isotope_checker(self.atomic_number, other.atomic_number)
+        self.isotope_checker(other.atomic_number)
         return self.neutron_number >= other.neutron_number
 
     def __eq__(self, other):
@@ -94,7 +94,7 @@ class Atom():
         """
 
         # Check whether these two atom objects are isotopes
-        self.isotope_checker(self.atomic_number, other.atomic_number)
+        self.isotope_checker(other.atomic_number)
         return self.neutron_number == other.neutron_number
 
     def proton_number(self):
@@ -125,17 +125,15 @@ class Atom():
         self.neutron_number = new_number
 
 
-    @staticmethod
-    def isotope_checker(proton_number1, proton_number2):
+    def isotope_checker(self, proton_number2):
         """
         type: static method
-        input: 1- proton_number1: is the proton number of the first Atom object
-               2- proton_number2: is the proton number of the second Atom object
+        input: 1- proton_number2: is the proton number of the first Atom object
         explanation: this function check whether two Atom objects are isotope or raise NotIsotope
                      error.
         """
-        if proton_number1 != proton_number2:
-            raise NotIsotope(proton_number1, proton_number2)
+        if self.atomic_number != proton_number2:
+            raise NotIsotope(self.atomic_number, proton_number2)
 
 if __name__ == "__main__":
 

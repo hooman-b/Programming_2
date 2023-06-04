@@ -25,5 +25,5 @@ class NotAtomObject(Exception):
 
 
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f"the input value {self.variable} is not an Atom object"   

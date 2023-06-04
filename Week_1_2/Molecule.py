@@ -5,29 +5,45 @@ class Molecule(list):
 
     def __init__(self, atom_list):
         super().__init__(atom_list)
-        self.tuple_two_value_checker()
-        self.atom_object_checker()
-        self.atom_number_checker()
-
-    def tuple_two_value_checker(self):
-        # asking teacher which one is better raise or assert 
-        for tuple_pair in self:
-            if len(tuple_pair) != 2:
-                raise ValueError ('the atom tuple contains more than two values')
-
-    def atom_number_checker(self):
-        for tuple_pair in self:
-            if not isinstance(tuple_pair[1], int):
-                raise ValueError ('the number of atoms is not inserted correctly')
+        self.object_validation_checker()
+        self.chemical_formula = self.chemical_formula_maker()
     
-    def atom_object_checker(self):
+    def __str__(self):
+        return self.chemical_formula
+    
+    def __add__(self, other):
+        formula = self.chemical_formula + other.chemical_formula
+        return formula
+
+    def object_validation_checker(self):
         for tuple_pair in self:
-            if not isinstance(tuple_pair[0], Atom):
-                raise NotAtomObject(tuple_pair[0])
+            assert isinstance(tuple_pair, tuple), ValueError('the input value is not a tuple')
+            assert len(tuple_pair) == 2, ValueError('the atom tuple contains more than two values')
+            assert isinstance(tuple_pair[1], int), ValueError('the number of atoms is not inserted correctly')
+            assert isinstance(tuple_pair[0], Atom), NotAtomObject(tuple_pair[0])
+
+    def chemical_formula_maker(self):
+        chemical_formula = ''
+
+        for tuple_pair in self:
+
+            if tuple_pair[1] != 1:
+                chemical_formula += tuple_pair[0].atomic_symbol + str(tuple_pair[1])
+
+            else:
+                chemical_formula += tuple_pair[0].atomic_symbol
+
+        return chemical_formula
 
 if __name__ == "__main__":
     hydrogen = Atom('H', 1, 1)
+    carbon = Atom('C', 6, 6)
     oxygen = Atom('O', 8, 8)
+
     water = Molecule( [ (hydrogen, 2), (oxygen, 1) ] )
-    print(water)
+    co2 = Molecule( [ (carbon, 1), (oxygen, 2) ])
+    print (water) # H2O
+    print (co2) # CO2
+    print (water + co2) # H2OCO2
+
     

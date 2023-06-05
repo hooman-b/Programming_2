@@ -1,7 +1,7 @@
 import re
 import json
-import yaml
 from exceptions import LenghtDiscripancy
+
 class CsvConverter():
 
     def __init__(self, csv_file):

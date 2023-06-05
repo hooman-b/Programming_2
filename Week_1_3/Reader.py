@@ -26,4 +26,4 @@ if __name__ == "__main__":
     red = Reader(4)
     red.get_lines() #returns lines 2-6 as json
     red.get_lines() #returns lines 7-11 as json
-    print(red.get_lines()) #returns lines 12-16 as json
+    red.get_lines() #returns lines 12-16 as json

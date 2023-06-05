@@ -9,7 +9,6 @@ class CsvConverter():
         print(header)
 
     def key_maker(self, header):
-        # asking teacher about using re library
         keys_string = header
         keys_list = re.split(',', keys_string)
         return keys_list

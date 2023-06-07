@@ -9,7 +9,7 @@ class CsvConverter():
         print(header)
 
     def key_maker(self, header):
-        keys_string = header
+        keys_string = header.strip("\n")
         keys_list = re.split(',', keys_string)
         return keys_list
 

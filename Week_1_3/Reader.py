@@ -12,6 +12,7 @@ class Reader():
 
     def get_lines(self):
         lines_list = []
+        print(self.current_line)
 
         for line_number in range(self.line_number):      
             lines_list.append(lc.getline(self.path, self.current_line + line_number))
@@ -23,7 +24,7 @@ class Reader():
         return json_file
 
 if __name__ == "__main__":
-    red = Reader(4)
+    red = Reader(80)
     red.get_lines() #returns lines 2-6 as json
     red.get_lines() #returns lines 7-11 as json
-    red.get_lines() #returns lines 12-16 as json
+    print(len(red.get_lines())) #returns lines 12-16 as json

@@ -11,25 +11,32 @@ class Animation():
     def __init__(self, consuming_class):
 
         self.consuming_class = consuming_class
+        self.average_number = 0
+#        self.titles = ''
         self.fig, self.axes, self.line = self.subplot_maker()
 
         self.data_dict = self.data_initializer()
 
-        self.ani = animation.FuncAnimation(self.fig, self.run,
-                                           self.consuming_class.temp_average_maker,
-                                           init_func=self.animation_initializer,
-                                           interval=300, repeat=False)
 
         self.paused = False
+
+
+    def animation_luncher(self):
+        ani = animation.FuncAnimation(self.fig, self.run,
+                                           self.consuming_class.update,
+                                           init_func=self.animation_initializer,
+                                            interval=300, repeat=False)
+    
         self.pause_button_ax = plt.axes([0.95, 0.49, 0.05, 0.05])
         self.pause_button = Button(self.pause_button_ax, 'Pause')
         self.pause_button.on_clicked(self.toggle_pause)
 
         plt.show()
+    
 
     def subplot_maker(self):
-        plot_numbers = self.consuming_class.average_number
-        titles_list = self.consuming_class.reader.csv_converter.keys
+        plot_numbers = 1 #self.consuming_class.average_number
+        titles_list = 'year' #self.consuming_class.reader.csv_converter.keys
         print(plot_numbers)
         num_rows = math.ceil(math.sqrt(plot_numbers))
         num_cols = math.ceil(plot_numbers / num_rows)

@@ -26,6 +26,10 @@ class Animation(SecondLayerObserver):
         else:
             axes = axes.flatten()
 
+            # refactoring this for-loop into list comprehension may not be the
+            # best choice here since these operations are not used to make a list,
+            # they are implementing some modifications. This kind of in-place modification
+            # of objects is more suitable for a loop rather than a list comprehension.
             for number, ax in enumerate(axes):
 
                 if number%num_cols != 0:
@@ -35,6 +39,7 @@ class Animation(SecondLayerObserver):
                     ax.get_xaxis().set_visible(False)
 
         # Hide unused subplots
+        # The above reasoning is also correct for this loop.
         for i in range(self.plot_number, len(axes)):
             fig.delaxes(axes[i])
 
@@ -43,11 +48,9 @@ class Animation(SecondLayerObserver):
         return fig, axes, line_colors
 
     def data_initializer(self):
-        data_dict = {}
-        data_dict['xdata'] = []
-
-        for number in range(len(self.axes)):
-            data_dict[f'y{number}data'] = []
+        # in this case, it seems that dictionary comprehension is a better approach.
+        # Because, not only we want to make a dictionary, but also we can reduce the number of code lines.
+        data_dict = {'xdata': [], **{f'y{number}data': [] for number in range(len(self.axes))}}
 
         return data_dict
 
@@ -57,6 +60,10 @@ class Animation(SecondLayerObserver):
             self.titles_list = data[1].index
             self.data_dict['xdata'].append(data[0])
 
+            # refactoring the following for-loop may not be the best choice
+            # since this loop does not make a list. It is true that it appends
+            # values to different lists in the dictionary. But by using list
+            # comprehension we can make complexity.
             for  counter in range(self.plot_number):
                 self.data_dict[f'y{counter}data'].append(data[1][counter])
 
@@ -67,6 +74,8 @@ class Animation(SecondLayerObserver):
 
     def animation_luncher(self):
 
+        # Here again the for-loop is doing some operations that can be better to do them
+        # with a loop rather than list comprehension.
         for counter in range(self.plot_number):
             self.axes[counter].clear()
             self.axes[counter].plot(self.data_dict['xdata'], self.data_dict[f'y{counter}data'],
@@ -77,11 +86,11 @@ class Animation(SecondLayerObserver):
         self.fig.canvas.draw()
 
     def color_maker(self):
-        color_list = []
+
         colors= list(mcolors.TABLEAU_COLORS.keys())
 
-        for counter in range(self.plot_number):
-            rand_int1 = randint(0, len(colors)-1)
-            color_list.append(colors[rand_int1])
+        # Here list comprehension can be a better choice as we 
+        # are making a list, but I believe for loop is more readable.
+        color_list = [colors[randint(0, len(colors)-1)] for _ in range(self.plot_number)]
 
         return color_list

@@ -16,6 +16,9 @@ class CsvConverter():
     def csv_to_json(self, csv_lines):
         json_list = []
 
+        # this is a complex loop and by converting this loop into list comprehension, 
+        # one makes it quite less readable; consequently, in this condition list comprehensions
+        # are not the first choice.
         for line in csv_lines:
             line = line.strip("\n")
             vals_list = re.split(',', line)

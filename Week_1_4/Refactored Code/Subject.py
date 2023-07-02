@@ -11,6 +11,9 @@ class Subject():
             self.observer_list.remove(observer)
 
     def notify_observers(self, *args, **kwargs):
+
+        # Also, this for-loop is an operational 
+        # for-loop so for-loop is the best choice
         for obsever in self.observer_list:
             obsever.update(*args, **kwargs) 
 

@@ -1,5 +1,4 @@
 # pylint: disable=E1101
-import time
 import pandas as pd
 import linecache as lc
 from Subject import Subject
@@ -19,11 +18,11 @@ class Reader(Subject):
         self.csv_converter = CsvConverter(lc.getline(self.path, 1))
 
     def get_lines(self):
-        lines_list = []
+
         print(self.current_line)
 
-        for line_number in range(self.line_number):      
-            lines_list.append(lc.getline(self.path, self.current_line + line_number))
+        # convert the privious for loop to this.
+        lines_list = [lc.getline(self.path, self.current_line + number) for number in range(self.line_number)]
 
         json_file = self.csv_converter.csv_to_json(lines_list)
         self.current_line += self.line_number
@@ -32,6 +31,9 @@ class Reader(Subject):
         return json_file
 
     def iterator(self):
+
+        # I cannot refactor this loop to list comprehension since 
+        # its product is not a list and it contains complex steps.
         while True:
             json_file = self.get_lines()
             temp_df = pd.read_json(json_file)

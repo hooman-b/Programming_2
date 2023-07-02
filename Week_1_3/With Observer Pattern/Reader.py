@@ -5,8 +5,7 @@ import linecache as lc
 from Subject import Subject
 from CsvConverter import CsvConverter
 from ConsumingClasses import AverageYear, AverageMonth
-from Animation import Animation 
-from HoomanAnimation import HoomanAnimation
+from Animation import Animation
 
 class Reader(Subject):
 
@@ -47,15 +46,20 @@ class Reader(Subject):
 
 if __name__ == "__main__":
     reader = Reader(5)
-    average_year = AverageMonth()
-    animation = HoomanAnimation(16)
 
+    average_year = AverageYear()
+    animation_year = Animation(1)
+
+    average_month = AverageMonth()
+    animation_month = Animation(12)
+    
     # Connect Reader and AverageYear
     reader.add_observer(average_year)
+    reader.add_observer(average_month)
 
     # Connect AverageYear and Animation
-    average_year.add_observer(animation)
-
+    average_year.add_observer(animation_year)
+    average_month.add_observer(animation_month)
     # Start the data iteration
     reader.iterator()
 

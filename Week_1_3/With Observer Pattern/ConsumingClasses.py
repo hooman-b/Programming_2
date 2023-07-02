@@ -1,6 +1,5 @@
 # pylint: disable=E1101
 import pandas as pd
-from Animation import Animation
 from Subject import FirstLayerObserver
 
 class AverageYear(FirstLayerObserver):
@@ -13,7 +12,8 @@ class AverageYear(FirstLayerObserver):
 
         try:
             update_list.append(temp_df.iloc[:, 0].mean(axis=0))
-            update_list.append(temp_df.iloc[:, 1:13].mean(axis=None))
+            avg_series = pd.Series(temp_df.iloc[:, 1:13].mean(axis=None), index=['year'])
+            update_list.append(avg_series)
             self.notify_observers(update_list)
 
         except IndexError:

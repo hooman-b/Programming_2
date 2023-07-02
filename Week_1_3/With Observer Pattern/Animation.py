@@ -5,7 +5,7 @@ from random import randint
 import math
 from Subject import SecondLayerObserver
 
-class HoomanAnimation(SecondLayerObserver):
+class Animation(SecondLayerObserver):
     def __init__(self, plot_num):
         SecondLayerObserver.__init__(self)
         self.plot_number = plot_num

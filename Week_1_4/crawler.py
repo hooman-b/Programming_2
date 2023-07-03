@@ -45,7 +45,6 @@ class Crawler():
         except Exception as e:
             return e
 
-
     def open_url(self, url):
         """ reads url file as a big string and cleans the html file to make it
             more readable. input: url, output: soup object
@@ -70,10 +69,7 @@ class Crawler():
         """ get from soup object a list of anchor tags,
             get the href keys and and prints them. Input: soup object
         """
-        reflist = []
-        tags = self.soup('a')
-        for tag in tags:
-            reflist.append(tag)
+        reflist = [tag for tag in self.soup('a')]
         return reflist
 
     def extract(self, sub_url):
@@ -89,10 +85,8 @@ class Crawler():
         return sidebar[0]
 
     def read_li(self, information):
-        lilist = []
-        tags = information('li')
-        for tag in tags:
-            lilist.append(tag)
+        
+        lilist = [tag for tag in information('li')]
         return lilist
 
     def get_phone(self, information):

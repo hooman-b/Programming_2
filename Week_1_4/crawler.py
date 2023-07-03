@@ -32,14 +32,14 @@ class Crawler():
         try:
             sub = self.extract(sub)
             site = self.url[:-16] + sub
-            soup = self.open_url(site)    
+            soup = self.open_url(site)
             info = self.fetch_sidebar(soup)
             info = self.read_li(info)
             phone = self.get_phone(info)
             phone = self.remove_html_tags(phone).strip()
             email = self.get_email(info)
             email = self.remove_html_tags(email).replace("/","")
-            
+
             return f'{site} ; {phone} ; {email}'
 
         except Exception as e:

@@ -25,7 +25,26 @@ class Crawler():
         self.pointer += 1
         if self.pointer == len(self.sub_urls):
             raise StopIteration
-        return self.sub_urls[self.pointer]
+        website = self.crawl_site(self.sub_urls[self.pointer])
+        return website
+
+    def crawl_site(self, sub):
+        try:
+            sub = self.extract(sub)
+            site = self.url[:-16] + sub
+            soup = self.open_url(site)    
+            info = self.fetch_sidebar(soup)
+            info = self.read_li(info)
+            phone = self.get_phone(info)
+            phone = self.remove_html_tags(phone).strip()
+            email = self.get_email(info)
+            email = self.remove_html_tags(email).replace("/","")
+            
+            return f'{site} ; {phone} ; {email}'
+
+        except Exception as e:
+            return e
+
 
     def open_url(self, url):
         """ reads url file as a big string and cleans the html file to make it
@@ -56,26 +75,6 @@ class Crawler():
         for tag in tags:
             reflist.append(tag)
         return reflist
-
-
-    def crawl_site(self):
-        for sub in self.sub_urls:
-            try:
-                sub = self.extract(sub)
-                site = self.url[:-16] + sub
-                soup = self.open_url(site)    
-                info = self.fetch_sidebar(soup)
-                info = self.read_li(info)
-                phone = self.get_phone(info)
-                phone = self.remove_html_tags(phone).strip()
-                email = self.get_email(info)
-                email = self.remove_html_tags(email).replace("/","")
-                yield f'{site} ; {phone} ; {email}'
-            except Exception as e:
-                yield e
-                exit()
-
-
 
     def extract(self, sub_url):
         text = str(sub_url)

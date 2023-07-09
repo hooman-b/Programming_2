@@ -2,15 +2,11 @@
 import time
 import pandas as pd
 import linecache as lc
-from Subject import Subject
 from CsvConverter import CsvConverter
-from ConsumingClasses import AverageYear
-from Animation import Animation 
 
-class Reader(Subject):
+class Reader():
 
-    def __init__(self, line_number, path='D:\\Python\\data_programming_2\\week3_data\\dSST.csv'):
-        Subject.__init__(self)
+    def __init__(self, line_number, path='dSST.csv'):
         self.path = path
         self.line_number = line_number
         self.read_lines = 2
@@ -31,34 +27,11 @@ class Reader(Subject):
 
         return json_file
 
-    def iterator(self):
-        while True:
-            json_file = self.get_lines()
-            temp_df = pd.read_json(json_file)
-
-            if temp_df.shape[1] == 0:
-                print("DataFrame doesn't have enough columns.")
-                break
-
-            self.notify_observers(temp_df)
-            time.sleep(0.05)
-
 
 if __name__ == "__main__":
-    reader = Reader(5)
-    average_year = AverageYear()
-    animation = Animation(1)
 
-    # Connect Reader and AverageYear
-    reader.add_observer(average_year)
-
-    # Connect AverageYear and Animation
-    average_year.add_observer(animation)
-
-    # Start the data iteration
-    reader.iterator()
-    print('hi')
-    reader.iterator()
-    # Create and run the animation
-    #animation.create_animation()
-
+    
+    red = Reader(5)
+#    red.get_lines() #returns lines 2-6 as json
+#    red.get_lines() #returns lines 7-11 as json
+#    print(len(red.get_lines())) #returns lines 12-16 as json

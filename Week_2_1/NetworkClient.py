@@ -1,4 +1,3 @@
-
 import requests
 import asyncio
 
@@ -23,9 +22,9 @@ class NetworkClient:
             self.delay_maker(3),
             self.get_data('http://localhost:9000/Data/1890'),
             self.delay_maker(2),
-            self.get_data('http://localhost:9000/Data/2001/2003'),   
+            self.get_data('http://localhost:9000/Data/2001/2003'),
         ]
         await asyncio.gather(*task_list)
 
-
-asyncio.run(NetworkClient().main())
+if __name__ == '__main__':
+    asyncio.run(NetworkClient().main())

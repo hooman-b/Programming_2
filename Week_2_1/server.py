@@ -19,12 +19,12 @@ class ServerHandler(SimpleHandler):
 
             pathParts = self.path.split("/")
             if self.path.startswith("/Data/all"):
-                result = dataProvider.GetData(True, "", "", "")
+                result = dataProvider.Get_data(True, "", "", "")
             elif self.check_is_number(pathParts[len(pathParts)-1]) and not self.check_is_number(pathParts[len(pathParts)-2]):
-                result = dataProvider.GetData(
+                result = dataProvider.Get_data(
                     False, pathParts[len(pathParts)-1], "", "")
             elif self.check_is_number(pathParts[len(pathParts)-1]) and self.check_is_number(pathParts[len(pathParts)-2]):
-                result = dataProvider.GetData(
+                result = dataProvider.Get_data(
                     False, "", pathParts[len(pathParts)-2], pathParts[len(pathParts)-1])
             else:
                 self.send_error(404)
@@ -44,8 +44,8 @@ class ServerHandler(SimpleHandler):
             return False
 
 
-port = 9000
+PORT = 9000
 socketserver.TCPServer.allow_reuse_address = True
-http = socketserver.TCPServer(('localhost', port), ServerHandler)
-print(f'serving on port {port}')
+http = socketserver.TCPServer(('localhost', PORT), ServerHandler)
+print(f'serving on port {PORT}')
 http.serve_forever()

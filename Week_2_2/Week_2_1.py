@@ -5,7 +5,7 @@ import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 
 #enter your email here; the one you used to create an api key in step 0
-Entrez.email = '' 
+Entrez.email = 'h.bahrdo@st.hanze.nl' 
 
 file = Entrez.elink(dbfrom="pubmed",
                    db="pmc",

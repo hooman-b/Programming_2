@@ -7,6 +7,8 @@ Explanation: This module contains a class (Molecule) that makes an Molecule obje
 from Atom import Atom
 from exceptions import NotAtomObject
 
+# Nice that you extend from list
+
 class Molecule(list):
     """
     type: list-like class
@@ -44,6 +46,9 @@ class Molecule(list):
         output: 1- formula: this is a chemical formula of a compound.
         """
 
+        # This is incorrect
+        # The add-method shoud return a new Molecule. In your realisation you
+        # just return a string.
         formula = self.chemical_formula + other.chemical_formula
         return formula
 
@@ -80,6 +85,7 @@ class Molecule(list):
         chemical_formula = ''
 
         # add tuples to the chemical_formula string
+        # Could also be done in a list-comprehension...
         for tuple_pair in self:
 
             # if the number of atom is not equal to one add its number

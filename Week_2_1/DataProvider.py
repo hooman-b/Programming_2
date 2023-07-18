@@ -20,6 +20,9 @@ class DataProvider:
         csv_file.close()
         return keys_list
 
+    # method should not start with a capital letter
+    # also, this method has quite a few parameters, not all of which
+    # will be necessary in all calls...
     def Get_data(self, get_all, single_year, year_low, year_high):
 
         result = self.get_json()

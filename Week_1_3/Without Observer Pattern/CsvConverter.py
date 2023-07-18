@@ -18,6 +18,8 @@ class CsvConverter():
 
         for line in csv_lines:
             line = line.strip("\n")
+            # no need to use a regex if you just split on a simple string.
+            # think about performance...
             vals_list = re.split(',', line)
 
             if len(vals_list) != 1:

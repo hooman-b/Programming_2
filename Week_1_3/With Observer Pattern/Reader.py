@@ -7,6 +7,7 @@ from CsvConverter import CsvConverter
 from ConsumingClasses import AverageYear, AverageMonth
 from Animation import Animation
 
+# Nice to use inheritance in this case.
 class Reader(Subject):
 
     def __init__(self, line_number, path='D:\\Python\\data_programming_2\\week3_data\\dSST.csv'):
@@ -31,6 +32,7 @@ class Reader(Subject):
 
         return json_file
 
+    # Why not use the __iter__ method?
     def iterator(self):
         while True:
             json_file = self.get_lines()

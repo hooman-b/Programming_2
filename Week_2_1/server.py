@@ -19,6 +19,10 @@ class ServerHandler(SimpleHandler):
 
             pathParts = self.path.split("/")
             if self.path.startswith("/Data/all"):
+                # See? Here you need to give all the parameters of Get_data
+                # and empty string. You could (should) have changed that 
+                # api so that it would be more flexible...
+                # Also, you use empty strings and False for kind of the same function.
                 result = dataProvider.Get_data(True, "", "", "")
             elif self.check_is_number(pathParts[len(pathParts)-1]) and not self.check_is_number(pathParts[len(pathParts)-2]):
                 result = dataProvider.Get_data(
@@ -41,6 +45,8 @@ class ServerHandler(SimpleHandler):
             a = float(val)
             return True
         except ValueError:
+            # Actually, it would be better to raise an error here and in the calling code
+            # return a status-code 400 (illegal request). 
             return False
 
 

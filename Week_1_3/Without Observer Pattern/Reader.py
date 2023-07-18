@@ -8,6 +8,7 @@ class Reader():
 
     def __init__(self, line_number, path='dSST.csv'):
         self.path = path
+        # I think the name of this field is wrong. Shouldn't it be something like `stride_length`?`
         self.line_number = line_number
         self.read_lines = 2
         self.current_line = 2

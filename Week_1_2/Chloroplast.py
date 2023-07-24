@@ -56,6 +56,12 @@ class Chloroplast():
         try:
 
             # get the value of an attribute
+            # This is a rather complex way to increase the 
+            # corresponding value of self.H2O or self.CO2, but ok.
+            # It's nice that you put this inside a try-catch block
+            # so a wrong molecule gets caught directly.
+
+            # However, with this method I could also increase self.C2H12O6
             attribute = getattr(self, str(molecule))
             attribute += 1
 
@@ -85,6 +91,9 @@ class Chloroplast():
         self.CO2 -= 6
         self.C6H12O6 += 1
         self.O2 += 6
+        # This is incorrect.
+        # You should have returned new sugar and oxygen molecules. In this case you
+        # just return a list of tuples of strings and numbers.
         return [('C6H12O6', self.C6H12O6), ('O2', self.O2)]
 
 if __name__ == "__main__":

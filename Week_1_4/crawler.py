@@ -26,6 +26,8 @@ class Crawler():
         if self.pointer == len(self.sub_urls):
             raise StopIteration
         website = self.crawl_site(self.sub_urls[self.pointer])
+        
+        # this should be `yield`, not `return`
         return website
 
     def crawl_site(self, sub):
@@ -115,6 +117,7 @@ class Crawler():
             email = ""
         return email
 
+    # Good observation that these methods could be made static.
     @staticmethod
     def hack_ssl():
         """ ignores the certificate errors"""

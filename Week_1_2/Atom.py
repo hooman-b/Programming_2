@@ -126,6 +126,11 @@ class Atom():
 
 
     def isotope_checker(self, proton_number2):
+        # I know that PEP requires you to document all the methods, but personally 
+        # (and more important persons than me) dislike methods whose docstring is 
+        # than the method itself, especially if the method is clear in itself (like 
+        # and setters).
+
         """
         type: static method
         input: 1- proton_number2: is the proton number of the first Atom object

@@ -6,6 +6,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 #enter your email here; the one you used to create an api key in step 0
 Entrez.email = 'h.bahrdo@st.hanze.nl' 
+# Good that you do not have your api-key inside the repo.
 
 file = Entrez.elink(dbfrom="pubmed",
                    db="pmc",
@@ -26,6 +27,7 @@ handle = Entrez.efetch(db="pubmed",
 print(handle.read())
 ##############################
 
+# method and function names should start with a lower case letter
 def Download(id):
     handle = Entrez.efetch(db="pubmed",
                            id=id,
@@ -38,6 +40,7 @@ def Download(id):
 
     # print(handle.read())
 if __name__ == "__main__":
+    # Ok, you're using another method than I asked, but this works in kind of the same manner.
     procsessList = []
     for id in references[:10]:
         process = Process(target=Download, args=(id,))

@@ -1,4 +1,6 @@
 # pylint: disable=E1101
+# you were not allowed to use pandas for this exercise, but you 
+# don't use it for reading, just for visualisation, so ok.
 import pandas as pd
 from Reader import Reader
 from Animation import Animation
@@ -11,6 +13,7 @@ class AverageYear():
 
 
     def temp_average_maker(self):
+        
 
         while True:
 

@@ -14,6 +14,7 @@ class Subject():
         for obsever in self.observer_list:
             obsever.update(*args, **kwargs) 
 
+# I'm not sure I understand what these two classes do...
 class FirstLayerObserver(Subject):
     def __init__(self):
         Subject.__init__(self)

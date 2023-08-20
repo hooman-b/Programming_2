@@ -119,6 +119,5 @@ if __name__ == '__main__':
 
     print(f'\n{perform_test(df)}')
 
-    
     # Dask delayed computation
     print(f'\n{costly_simulation(df)}')

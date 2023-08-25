@@ -1,51 +1,76 @@
+# General libraries
 import pandas as pd
+
+# statistical libraries
 from statsmodels.tsa.api import  SimpleExpSmoothing
+
+# Feature Engineering module
+from sklearn.feature_selection import SelectKBest, chi2
 
 class DataManager():
 
-    def __init__(self, df, norm_name, smoothing_par, smoothing_method):
+    def __init__(self, df, fill_method, smoothing_par, smoothing_method, norm_name):
         self.df = df
 
-        self.norm_name = norm_name
-
+        # Preprocessing parameters
+        self.fill_method = fill_method
         self.smoothing_par = smoothing_par
         self.smoothing_method = smoothing_method
 
+        # Normalization parameters
+        self.norm_name = norm_name
 
-class Normalization(DataManager):
-      
-    def max_norm(self): 
-        return self.df.apply(lambda x: x / x.abs().max())
-
-    def min_max_norm(self):
-        return self.df.apply(lambda x: (x - x.min()) / (x.max() - x.min()))
-
-    def z_score_norm(self):    
-        return self.df.apply(lambda x: (x - x.mean()) / x.std())
-
-    def method_selector(self):
+    def dataframe_manager(self):
         """
-        input: 1- method_name: this string determines the method's type.
-        explanation: This function chooses the right endmember extraction method based
-                     on the input name. And, return the endmembers based on the method.
-        output: 1- an endmember method
+        This function implements all the preprocessing steps on the dataframe
+        and returns the transformed dataset to the main function.
         """
-        # make the function name
-        method_name = f'{self.norm_name}_norm'
-        normalization_method = getattr(self, method_name)
-        # return the spectrum
-        return normalization_method()
+        # Preprocessing part
+        preprocessing_obj = Prprocessing(self.df, self.fill_method, self.smoothing_par,
+                                         self.smoothing_method)
+        self.df = preprocessing_obj.datframe_pruner()
+        self.df = preprocessing_obj.dataframe_smoother()
 
+        # Normalization part
+        normalization_obj = Normalization(self.df, self.norm_name)
+        self.df = normalization_obj.method_selector()
 
-class Prprocessing(DataManager):
+        # Feature engineering
+        feature_engineering_obj = FeatureEngineering(self.df)
+        self.df = feature_engineering_obj.dataframe_cropper(12)
+
+        return self.df
+
+class Prprocessing():
+
+    def __init__(self, df, fill_method, smoothing_par, smoothing_method):
+        self.df = df 
+        self.fill_method = fill_method
+        self.smoothing_par = smoothing_par
+        self.smoothing_method = smoothing_method
 
     def datframe_pruner(self):
-        # Drop redundant columns
-        self.df.drop(['sensor_15', 'sensor_50', 'sensor_51'],inplace = True,axis=1)
-        # Fill the null values
-        self.df.iloc[:,:-1] = self.df.iloc[:,:-1].fillna(method='bfill')
+        """
+        This function prune (drop) the necessary data columns and fill the Nan values
+        """
+        # Make a copy of the dataset
+        df_processed = self.df.copy()
 
-    def smoothing_data(self):
+        # Drop redundant columns
+        df_processed.drop(['sensor_15', 'sensor_50', 'sensor_51'],inplace = True,axis=1)
+
+        # Fill the null values
+        df_processed.iloc[:,:-1] = df_processed.iloc[:,:-1].fillna(method=self.fill_method)
+
+        return df_processed
+
+    def dataframe_smoother(self):
+        """
+        This function implements a smoothing technique on the dataset
+        """
+        df_copy = self.df.copy()
+
+        # Slice the floating part
         float_df = self.df.iloc[:,:49]
 
         if self.smoothing_method == 'rolling_mean':
@@ -63,7 +88,112 @@ class Prprocessing(DataManager):
 
             smoothed_df = pd.DataFrame(smoothed_dfs)
 
-        self.df.iloc[:, :49] = smoothed_df
+            df_copy.iloc[:, :49] = smoothed_df
+
+        return df_copy
+
+class Normalization():
+
+    def __init__(self, df, norm_name):
+        self.df = df
+        self.norm_name = norm_name
+
+    def max_normalizer(self): 
+        """
+        This function returns 'max' normalization
+        """
+        df_normalized = self.df.apply(lambda x: x / x.abs().max())
+        return df_normalized
+
+    def min_max_normalizer(self):
+        """
+        This function returns 'min_max normalization
+        """
+        df_normalized = self.df.apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+        return df_normalized
+
+    def z_score_normalizer(self):
+        """
+        This function returns z-score normalization
+        """
+        df_normalized = self.df.apply(lambda x: (x - x.mean()) / x.std())
+        return df_normalized
+
+    def method_selector(self):
+        """
+        input: 1- method_name: this string determines the method's type.
+        explanation: This function chooses the right endmember extraction method based
+                     on the input name. And, return the endmembers based on the method.
+        output: 1- an endmember method
+        """
+        # make the function name
+        method_name = f'{self.norm_name}_normalizer'
+        normalization_method = getattr(self, method_name)
+
+        # return the spectrum
+        return normalization_method()
 
 class FeatureEngineering():
-    pass
+
+    def __init__(self, df):
+        self.df = df
+        self.selector = self.feature_engineering()
+    
+    def making_one_hot(self):
+        """
+        This function make one_hot encoder from label column
+        """
+        # make one hot encoder
+        status_series = self.df.machine_status
+        one_hot = pd.get_dummies(status_series)
+        one_hot = one_hot.astype(int)
+        return one_hot
+
+    def feature_engineering(self):
+        """
+        This function implements SelectKBest model on the dataset
+        """
+        float_df = self.df.iloc[:,:49]
+
+        # make one hot encoder
+        one_hot = self.making_one_hot()
+
+        # extract feature importance scores
+        selector = SelectKBest(score_func=chi2)
+        selector.fit(float_df, one_hot['NORMAL'])
+
+        return selector
+
+    def score_sorter(self):
+        """
+        This function make a sorted dictionary of the columns and their
+        scores in an ascending manner
+        """
+        rank_dict = {}
+        names = self.df.columns
+
+        # make a dictionary of scores
+        for number,_ in enumerate(self.selector.scores_):
+            rank_dict[names[number]] = self.selector.scores_[number]
+
+        # sort the scores
+        rank_dict = dict(sorted(rank_dict.items(), key=lambda item: -1 * item[1]))
+
+        return rank_dict
+
+    def dataframe_cropper(self, slice_number):
+        """
+        This function crops the columns in the dataset with the highest
+        scores in another dataset
+        """
+        # make the rank dictionary
+        rank_dict = self.score_sorter()
+
+        # make name list
+        name_list = list(rank_dict.keys())[:slice_number]
+
+        # crop the dataframe
+        selected_df = self.df.iloc[:,:49].loc[:,name_list]
+        selected_df['machine_status'] = self.df['machine_status']
+
+        return selected_df

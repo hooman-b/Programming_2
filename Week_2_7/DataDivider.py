@@ -4,10 +4,9 @@ import pandas as pd
 
 class DataDivider():
 
-    def __init__(self, input_path, division_range):
+    def __init__(self, input_path):
         self.config = self.config_reader(input_path)
         self.df = self.dataframe_maker()
-        self.division_range = division_range
 
     def config_reader(self, input_path):
         """
@@ -38,19 +37,19 @@ class DataDivider():
 
         return df
 
-    def dataframe_divider(self):
+    def dataframe_divider(self, division_range='M'):
         """
         this method divide the dataset into definite number of 
         training and testing datasets, then save them in a determined path
         """
         # change the directory
-        output_dir = list(self.config.values())[2]
+        output_dir = self.config['output_path']
         os.makedirs(output_dir, exist_ok=True)
 
         # Make a series of the range in which wants to divide the data
         start_date = self.df.index.min()
         end_date = self.df.index.max()
-        dates = pd.date_range(start=start_date, end=end_date, freq=self.division_range)
+        dates = pd.date_range(start=start_date, end=end_date, freq=division_range)
 
         # Slice around 60% of the dataset for training purpose
         train_month_number = int(len(dates) * 0.6) - 1
@@ -67,5 +66,5 @@ class DataDivider():
 if __name__ == '__main__':
 
     # run the DataDivider class
-    divider = DataDivider('config.yaml', 'M')
+    divider = DataDivider('config.yaml')
     divider.dataframe_divider()

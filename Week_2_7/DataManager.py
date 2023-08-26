@@ -58,6 +58,12 @@ class Smoothing():
         # Make a copy of the dataset
         df_processed = df.copy()
 
+        # change the type of the timestamp column
+        df_processed['timestamp'] = pd.to_datetime(df_processed['timestamp'])
+
+        # set timestamp column as the index
+        df_processed.set_index('timestamp', inplace=True)
+
         # Drop redundant columns
         df_processed.drop(['sensor_15', 'sensor_50', 'sensor_51'],inplace = True,axis=1)
 
@@ -205,17 +211,17 @@ if __name__ == '__main__':
     with open("config.yaml", "r") as inputFile:
         config = yaml.safe_load(inputFile)
 
-    file_directory, file_name,_ = config.values()
-    os.chdir(file_directory)
-    df = pd.read_csv(file_name).drop('Unnamed: 0', axis=1)
+    file_directory, file_name,a,b = config.values()
+    os.chdir(a)
+    df = pd.read_csv(b)#.drop('Unnamed: 0', axis=1)
 
     # change the type of the timestamp column
-    df['timestamp'] = pd.to_datetime(df['timestamp'])
+    #df['timestamp'] = pd.to_datetime(df['timestamp'])
 
     # set timestamp column as the index
-    df.set_index('timestamp', inplace=True)
+    #df.set_index('timestamp', inplace=True)
     manager_obj = DataManager(df,
-                              fill_method='bfill',
+                              fill_method='ffill',
                               smoothing_par=None,
                               smoothing_method='exponential',
                               norm_name='min_max')

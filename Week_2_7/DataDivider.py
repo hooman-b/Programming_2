@@ -12,7 +12,7 @@ class DataFrameMaker:
         """
         # make the dataframe
         df = self.read_write_obj.dataframe_reader('file_direction', 'file_name')
-        df.drop('Unnamed: 0', axis=1)
+        df = df.drop('Unnamed: 0', axis=1)
 
         # change the type of the timestamp column
         df['timestamp'] = pd.to_datetime(df['timestamp'])
@@ -44,6 +44,7 @@ class DataDivider:
         df_train = self.df.loc[:dates[train_month_number]]
 
         # save the train dataset
+        print(df_train)
         self.read_write_obj.dataframe_writer(df_train, 'df_train.csv')
 
         # save all the test sets

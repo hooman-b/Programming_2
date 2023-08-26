@@ -1,8 +1,9 @@
 import os
 import pandas as pd
+from joblib import dump
 from ConfigReader import ConfigReader
 
-class ReadWrite:
+class ReadWrite():
     config = ConfigReader()
 
     def dataframe_reader(self, input_dir, file_name):
@@ -33,3 +34,11 @@ class ReadWrite:
         # save the dataframe
         df.to_csv(os.path.join(output_dir, file_name))
         print(f'{file_name} written successfully.')
+    
+    def model_saver(self, model, model_name):
+        output_dir = self.config['output_path']
+
+        # Change the direction
+        os.makedirs(output_dir, exist_ok=True)
+        dump(model, model_name)
+

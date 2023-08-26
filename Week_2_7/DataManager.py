@@ -1,4 +1,7 @@
 # General libraries
+import os
+import yaml
+import numpy as np
 import pandas as pd
 
 # statistical libraries
@@ -26,14 +29,13 @@ class DataManager():
         and returns the transformed dataset to the main function.
         """
         # Preprocessing part
-        preprocessing_obj = Prprocessing(self.df, self.fill_method, self.smoothing_par,
+        preprocessing_obj = Smoothing(self.df, self.fill_method, self.smoothing_par,
                                          self.smoothing_method)
-        self.df = preprocessing_obj.datframe_pruner()
         self.df = preprocessing_obj.dataframe_smoother()
 
         # Normalization part
-        normalization_obj = Normalization(self.df, self.norm_name)
-        self.df = normalization_obj.method_selector()
+        normalization_obj = Normalization(self.df.iloc[:,:-1], self.norm_name)
+        self.df.iloc[:,:-1] = normalization_obj.method_selector()
 
         # Feature engineering
         feature_engineering_obj = FeatureEngineering(self.df)
@@ -41,20 +43,20 @@ class DataManager():
 
         return self.df
 
-class Prprocessing():
+class Smoothing():
 
     def __init__(self, df, fill_method, smoothing_par, smoothing_method):
-        self.df = df 
         self.fill_method = fill_method
         self.smoothing_par = smoothing_par
         self.smoothing_method = smoothing_method
+        self.df = self.datframe_pruner(df)
 
-    def datframe_pruner(self):
+    def datframe_pruner(self, df):
         """
         This function prune (drop) the necessary data columns and fill the Nan values
         """
         # Make a copy of the dataset
-        df_processed = self.df.copy()
+        df_processed = df.copy()
 
         # Drop redundant columns
         df_processed.drop(['sensor_15', 'sensor_50', 'sensor_51'],inplace = True,axis=1)
@@ -71,7 +73,7 @@ class Prprocessing():
         df_copy = self.df.copy()
 
         # Slice the floating part
-        float_df = self.df.iloc[:,:49]
+        float_df = self.df.iloc[:,:-1]
 
         if self.smoothing_method == 'rolling_mean':
             #calculate rolling mean
@@ -82,7 +84,7 @@ class Prprocessing():
             smoothed_dfs = {}
 
             for column in float_df.columns:
-                model = SimpleExpSmoothing(float_df[column])
+                model = SimpleExpSmoothing(np.array(float_df[column]))
                 smoothed_model = model.fit(smoothing_level=self.smoothing_par, optimized=True,)
                 smoothed_dfs[column] = smoothed_model.fittedvalues
 
@@ -153,7 +155,7 @@ class FeatureEngineering():
         """
         This function implements SelectKBest model on the dataset
         """
-        float_df = self.df.iloc[:,:49]
+        float_df = self.df.iloc[:,:-1]
 
         # make one hot encoder
         one_hot = self.making_one_hot()
@@ -197,3 +199,26 @@ class FeatureEngineering():
         selected_df['machine_status'] = self.df['machine_status']
 
         return selected_df
+
+if __name__ == '__main__':
+
+    with open("config.yaml", "r") as inputFile:
+        config = yaml.safe_load(inputFile)
+
+    file_directory, file_name,_ = config.values()
+    os.chdir(file_directory)
+    df = pd.read_csv(file_name).drop('Unnamed: 0', axis=1)
+
+    # change the type of the timestamp column
+    df['timestamp'] = pd.to_datetime(df['timestamp'])
+
+    # set timestamp column as the index
+    df.set_index('timestamp', inplace=True)
+    manager_obj = DataManager(df,
+                              fill_method='bfill',
+                              smoothing_par=None,
+                              smoothing_method='exponential',
+                              norm_name='min_max')
+    df_trans = manager_obj.dataframe_manager()
+    print(df_trans.head())
+    

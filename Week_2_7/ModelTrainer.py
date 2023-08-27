@@ -10,12 +10,7 @@ from ReadWriteClass import ReadWrite
 class ModelTrainer():
 
     def __init__(self, df):
-        self.data_manager_obj = DataManager(df,
-                              fill_method='ffill',
-                              smoothing_par=None,
-                              smoothing_method='exponential',
-                              norm_name='min_max')
-        self.df = self.data_manager_obj.dataframe_manager()
+        self.df = df
 
     def multiple_grid_search(self, estimator_dict, scoring_list, cv_number, refit_method, data_dict):
 
@@ -76,12 +71,25 @@ class ModelTrainer():
         return final_dict
 
 if __name__ == '__main__':
-
+    from sklearn.metrics import make_scorer, f1_score, accuracy_score
     read_write_obj = ReadWrite()
     df = read_write_obj.dataframe_reader('output_path','train_data')
+    print(f'raw dataframe\n{df}')
 
-    model_trainer_obj = ModelTrainer(df)
+    manager_obj = DataManager(df,
+                              fill_method='ffill',
+                              smoothing_par=None,
+                              smoothing_method='exponential',
+                              norm_name='min_max')
+    df_trans = manager_obj.dataframe_manager()
+    print(f'processed dataframe\n{df_trans}')
+    y_train = [1 if element=='NORMAL' else -1 for element in df_trans.iloc[:,-1]]
+    model_trainer_obj = ModelTrainer(df_trans)
+
     model_dict = model_trainer_obj.model_trainer()
     print(model_dict)
+    y_pred = model_dict['IsolationForest']['best_model'].predict(df_trans.iloc[:,:-1])
+    print(np.unique(y_pred))
+    print(accuracy_score(y_train, y_pred))
 
 

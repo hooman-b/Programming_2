@@ -5,7 +5,7 @@
 # 1. https://medium.com/analytics-vidhya/monitoring-your-file-system-using-watchdog-64f7ad3279f
 # 2. https://snyk.io/advisor/python/watchdog/functions/watchdog.observers
 # 3. https://pythonhosted.org/watchdog/quickstart.html
-
+import os
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -42,12 +42,17 @@ class DataFileHandler(FileSystemEventHandler):
         self.calling_func = calling_func
 
     def on_created(self, event):
-
+        """
+        This function determines the condition of the file that should be watched
+        """
         # If the event is related to a directory creation, return
         if event.is_directory:
             return
-        
+
         # if the directory ends with .csv call the calling_func with the file path
-        if event.src_path.endswith(".csv"): 
+        if event.src_path.endswith(".csv"):
             print(f"New data file added: {event.src_path}")
-            self.calling_func(event.src_path)
+
+            # Slice the name of the file and pass it to the main function
+            filename = os.path.basename(event.src_path)
+            self.calling_func(filename)

@@ -35,7 +35,7 @@ class Plotter():
             # assign the recovery parts as yellow
             ax.plot(recovery_rows[sensor_names[number]], linestyle='none', marker='o',
                     color='yellow', markersize=5, label='recovering', alpha=0.5)
-            
+
             # Assign the broken parts as red
             ax.plot(broken_rows[sensor_names[number]], linestyle='none', marker='X',
                     color='red', markersize=20, label='broken')

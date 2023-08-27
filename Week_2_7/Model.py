@@ -1,3 +1,4 @@
+import numpy as np
 from ReadWriteClass import ReadWrite
 
 
@@ -10,5 +11,5 @@ class Model():
         """
         This function predict for a specific dataset.
         """
-        y_predict = self.model.predict(df)
+        y_predict = self.model.predict(np.array(df))
         return y_predict

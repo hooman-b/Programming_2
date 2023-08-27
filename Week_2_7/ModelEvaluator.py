@@ -1,4 +1,4 @@
-
+import numpy as np
 # Metric modules
 from sklearn.metrics import precision_score, recall_score, confusion_matrix, roc_curve, auc
 
@@ -7,10 +7,14 @@ class ModelEvaluator():
     def __init__(self, y_raw, y_pred, metric_names):
         self.y_actual = self.y_transformer(y_raw)
         self.y_pred = y_pred
+        print('1:',list(self.y_pred).count(1),'-1:',list( self.y_pred).count(-1), np.unique(self.y_pred))
         self.metric_names = metric_names
 
     def y_transformer(self, y_raw):
-       y_trans = [1 if element=='NORMAL' else -1 for element in y_raw.iloc[:,-1]]
+       y_trans = [1 if element=='NORMAL' else -1 for element in y_raw]
+       print('1:',y_trans.count(1),'-1:',y_trans.count(-1), np.unique(y_trans))
+       
+       
        return y_trans
 
     def precision(self):

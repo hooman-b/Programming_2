@@ -1,3 +1,5 @@
+# pylint: disable=E1101
+import time
 from ConfigReader import ConfigReader
 from MyWatchdog import DataDirectoryWatcher
 from ReadWriteClass import ReadWrite
@@ -15,12 +17,13 @@ def main(file_name):
     This is the main function of the program that implement all
     the process on a new observed dataset.
     """
+    time.sleep(10)
     # Print the new file path
     print(f"Processing data from file: {file_name}")
 
     # make the dataframe
     read_write_obj = ReadWrite()
-    raw_df = read_write_obj.dataframe_reader(config['target_directory'], file_name)
+    raw_df = read_write_obj.dataframe_reader('target_directory', file_name)
 
     # Transform the raw dataframe
     data_manager_obj = DataManager(raw_df,
@@ -32,7 +35,7 @@ def main(file_name):
     trans_df = data_manager_obj.dataframe_manager()
 
     # Call the trained model
-    model = Model(config['model_directory'], 'if_model.joblib')
+    model = Model('model_directory', 'if_model.joblib')
 
     # Predict the new labels
     y_pred = model.predict(trans_df.iloc[:, :-1])
@@ -43,7 +46,7 @@ def main(file_name):
     # Make a dictionary of evaluation metrics
     evaluator_obj = ModelEvaluator(trans_df['machine_status'], y_pred, config['metric_names'])
     evaluation_dict = evaluator_obj.evaluation_metrics_calculator()
-
+    print(evaluation_dict)
     # Sketch the anomaly plot
     plotter_obj = Plotter()
     anomaly_plot = plotter_obj.sensor_anomalies_plotter(df=trans_df, 
@@ -52,21 +55,21 @@ def main(file_name):
                                                         anomaly_method_name='IsolatedForest')
     
     # Sketch confusion matrix plot
-    cm_plot = plotter_obj.cm_plotter(cm=evaluation_dict['confusion_matrix'], logarithm=False)
+    cm_plot = plotter_obj.cm_plotter(cm=evaluation_dict['confusion'], logarithm=False)
 
     # Sketch AUC-ROC curve
     auc_plot = plotter_obj.auc_roc_plotter(evaluation_dict['auc_roc'])
 
     # Save the plots in the output directory
-    read_write_obj.plot_saver('output_directory', anomaly_plot, 'anomaly_plot.jpg')
-    read_write_obj.plot_saver('output_directory', cm_plot, 'cm_plot.jpg')
-    read_write_obj.plot_saver('output_directory', auc_plot, 'auc_roc_plot.jpg')
+    read_write_obj.plot_saver('image_directory', anomaly_plot, 'anomaly_plot.png')
+    read_write_obj.plot_saver('image_directory', cm_plot, 'cm_plot.png')
+    read_write_obj.plot_saver('image_directory', auc_plot, 'auc_roc_plot.png')
 
     # Save the transformed dataframe
     read_write_obj.dataframe_writer('output_directory', trans_df, f'transformed_{file_name}')
 
     # Save evaluation metrics
-     read_write_obj.dictionary_saver('output_directory', evaluation_dict, 'evaluation.txt')
+    read_write_obj.dictionary_saver('output_directory', evaluation_dict, 'evaluation.pickle')
 
     # Remove the raw file from target directory
     read_write_obj.file_remover('target_directory', file_name)

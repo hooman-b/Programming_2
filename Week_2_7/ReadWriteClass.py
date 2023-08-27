@@ -1,5 +1,6 @@
 import os
-import json
+import pickle
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from joblib import dump, load
@@ -49,7 +50,7 @@ class ReadWrite():
         # save the dataframe
         df.to_csv(os.path.join(output_dir, file_name))
         print(f'{file_name} written successfully.')
-    
+
     def model_saver(self, model, model_name):
         output_dir = self.config['output_path']
 
@@ -64,21 +65,30 @@ class ReadWrite():
 
         # Change the direction
         os.makedirs(output_dir, exist_ok=True)
-        plt.imsave(plot_name, plot)
+
+        # make an agg figure
+        plot.canvas.draw()
+
+        # grab the pixel buffer and dump it into a numpy array
+        X = np.array(plot.canvas.renderer.buffer_rgba())
+        plt.imsave(plot_name, X)
         print(f'{plot_name} saved successfully.')
 
     def file_remover(self, target_path, file_name):
         target_dir = self.config[target_path]
+        file_path = os.path.join(target_dir, file_name)
 
-        # Change the direction
-        os.makedirs(target_dir, exist_ok=True)
-        os.remove(file_name)
-        print(f'{file_name} removed successfully.')
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            print(f'{file_name} removed successfully.')
+        else:
+            print(f'{file_name} not found.')
 
     def dictionary_saver(self, output_path, dictionary, dict_name):
         output_dir = self.config[output_path]
 
         # Change the direction
         os.makedirs(output_dir, exist_ok=True)
-        json.dump(dictionary, dict_name)
+        with open(dict_name, 'wb') as name:
+            pickle.dump(dictionary, name)
         print(f'{dict_name} saved successfully.')

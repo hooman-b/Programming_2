@@ -5,8 +5,10 @@
 # 1. https://medium.com/analytics-vidhya/monitoring-your-file-system-using-watchdog-64f7ad3279f
 # 2. https://snyk.io/advisor/python/watchdog/functions/watchdog.observers
 # 3. https://pythonhosted.org/watchdog/quickstart.html
+
 import os
 import time
+import pandas as pd
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 

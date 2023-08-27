@@ -46,11 +46,11 @@ class DataDivider:
         return df_dict
 
 
-def main(main_dir, file_name):
+def main(raw_file_dir, divided_df_dir, file_name):
     read_write_obj = ReadWrite()
 
     # Read the row data
-    df = read_write_obj.dataframe_reader(main_dir, file_name)
+    df = read_write_obj.dataframe_reader(raw_file_dir, file_name)
 
     # Divide the dataset
     data_divider_obj = DataDivider(df)
@@ -58,9 +58,9 @@ def main(main_dir, file_name):
 
     # save the dataframes
     for name , dataframe in df_dictionary.items():
-        read_write_obj.dataframe_writer(dataframe, name)
+        read_write_obj.dataframe_writer(divided_df_dir, dataframe, name)
 
 
     
 if __name__ == '__main__':
-    main('file_direction', 'file_name')
+    main('raw_file_directory', 'divided_data_directory', 'sensor.csv')

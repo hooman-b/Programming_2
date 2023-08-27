@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from joblib import dump
+from joblib import dump, load
 from ConfigReader import ConfigReader
 
 class ReadWrite():
@@ -20,6 +20,22 @@ class ReadWrite():
 
         except FileNotFoundError:
             print(f'file {file_name} not found.')
+            return None
+
+    def model_reader(self, input_dir, model_name):
+        """
+        This function reads a model from a specific directory
+        """
+        try:
+            # read the model
+            file_directory = self.config[input_dir]
+            model_name = self.config[model_name]
+            os.chdir(file_directory)
+
+            return load(model_name)
+
+        except FileNotFoundError:
+            print(f'model {model_name} not found.')
             return None
 
     def dataframe_writer(self, df, file_name):

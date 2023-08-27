@@ -29,7 +29,7 @@ class DataManager():
         and returns the transformed dataset to the main function.
         """
         # Preprocessing part
-        preprocessing_obj = Smoothing(self.df, self.fill_method, self.smoothing_par,
+        preprocessing_obj = Preprocessing(self.df, self.fill_method, self.smoothing_par,
                                          self.smoothing_method)
         self.df = preprocessing_obj.dataframe_smoother()
 
@@ -43,15 +43,15 @@ class DataManager():
 
         return self.df
 
-class Smoothing():
+class Preprocessing():
 
     def __init__(self, df, fill_method, smoothing_par, smoothing_method):
         self.fill_method = fill_method
         self.smoothing_par = smoothing_par
         self.smoothing_method = smoothing_method
-        self.df = self.datframe_pruner(df)
+        self.df = self.datframe_cleener(df)
 
-    def datframe_pruner(self, df):
+    def datframe_cleener(self, df):
         """
         This function prune (drop) the necessary data columns and fill the Nan values
         """
@@ -65,7 +65,7 @@ class Smoothing():
         df_processed.set_index('timestamp', inplace=True)
 
         # Drop redundant columns
-        df_processed.drop(['sensor_15', 'sensor_50', 'sensor_51'],inplace = True,axis=1)
+        df_processed.drop(['sensor_15', 'sensor_50', 'sensor_51', 'Unnamed: 0'], inplace = True,axis=1)
 
         # Fill the null values
         df_processed.iloc[:,:-1] = df_processed.iloc[:,:-1].fillna(method=self.fill_method)

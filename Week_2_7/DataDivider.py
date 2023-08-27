@@ -2,38 +2,30 @@ import pandas as pd
 from ConfigReader import ConfigReader
 from ReadWriteClass import ReadWrite
 
-class DataFrameMaker:
+class DataDivider:
     config = ConfigReader()
-    read_write_obj = ReadWrite()
 
-    def dataframe_maker(self):
+    def __init__(self, df):
+        self.df = self.index_changer(df)
+    
+    def index_changer(self, df):
         """
-        make the main dataset based on the configuration file
+        this function changes the index from integer numbers to dates
         """
-        # make the dataframe
-        df = self.read_write_obj.dataframe_reader('file_direction', 'file_name')
-        df = df.drop('Unnamed: 0', axis=1)
-
         # change the type of the timestamp column
         df['timestamp'] = pd.to_datetime(df['timestamp'])
 
         # set timestamp column as the index
         df.set_index('timestamp', inplace=True)
+
         return df
-
-class DataDivider:
-    config = ConfigReader()
-    read_write_obj = ReadWrite()
-
-    def __init__(self, df):
-        self.df = df
 
     def data_divider(self, division_range='M'):
         """
         this method divide the dataset into definite number of 
         training and testing datasets, then save them in a determined path
         """
-
+        df_dict = {}
         # Make a series of the range in which wants to divide the data
         start_date = self.df.index.min()
         end_date = self.df.index.max()
@@ -43,19 +35,32 @@ class DataDivider:
         train_month_number = int(len(dates) * 0.6) - 1
         df_train = self.df.loc[:dates[train_month_number]]
 
-        # save the train dataset
-        print(df_train)
-        self.read_write_obj.dataframe_writer(df_train, 'df_train.csv')
+        # add the train dataset
+        df_dict['df_train.csv'] = df_train
 
-        # save all the test sets
+        # add all the test sets
         for number, counter in enumerate(range(train_month_number, len(dates) - 1, 1)):
             df_test = self.df.loc[dates[counter]:dates[counter+1]]
-            self.read_write_obj.dataframe_writer(df_test, f'df_test{number+1}.csv')
+            df_dict[f'df_test{number+1}.csv'] = df_test
 
+        return df_dict
+
+
+def main(main_dir, file_name):
+    read_write_obj = ReadWrite()
+
+    # Read the row data
+    df = read_write_obj.dataframe_reader(main_dir, file_name)
+
+    # Divide the dataset
+    data_divider_obj = DataDivider(df)
+    df_dictionary = data_divider_obj.data_divider()
+
+    # save the dataframes
+    for name , dataframe in df_dictionary.items():
+        read_write_obj.dataframe_writer(dataframe, name)
+
+
+    
 if __name__ == '__main__':
-
-    dataframe_builder = DataFrameMaker()
-    df = dataframe_builder.dataframe_maker()
-
-    data_divider = DataDivider(df)
-    data_divider.data_divider()
+    main('file_direction', 'file_name')

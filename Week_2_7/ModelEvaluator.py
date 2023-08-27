@@ -2,7 +2,7 @@
 # Metric modules
 from sklearn.metrics import precision_score, recall_score, confusion_matrix, roc_curve, auc
 
-class ModelEvaluater():
+class ModelEvaluator():
 
     def __init__(self, y_raw, y_pred, metric_names):
         self.y_actual = self.y_transformer(y_raw)
@@ -21,8 +21,8 @@ class ModelEvaluater():
   
     def f_score(self):
 
-        pre = self.precision(self.y_actual, self.y_pred)
-        rec = self.recall(self.y_actual, self.y_pred)
+        pre = self.precision()
+        rec = self.recall()
 
         f_score = (2.0 * pre * rec) / (pre + rec)
 

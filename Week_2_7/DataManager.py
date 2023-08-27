@@ -138,7 +138,7 @@ class Normalization():
         method_name = f'{self.norm_name}_normalizer'
         normalization_method = getattr(self, method_name)
 
-        # return the spectrum
+        # return the normalized dataframe
         return normalization_method()
 
 class FeatureEngineering():

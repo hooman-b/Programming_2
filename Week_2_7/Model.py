@@ -1,5 +1,5 @@
 from ReadWriteClass import ReadWrite
-from ConfigReader import ConfigReader
+
 
 class Model():
 

@@ -8,7 +8,6 @@
 
 import os
 import time
-import pandas as pd
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -57,4 +56,4 @@ class DataFileHandler(FileSystemEventHandler):
 
             # Slice the name of the file and pass it to the main function
             filename = os.path.basename(event.src_path)
-            self.calling_func(filename)
+            self.calling_func(event.src_path, filename)

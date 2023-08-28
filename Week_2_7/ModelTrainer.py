@@ -1,11 +1,8 @@
 import numpy as np
-import pandas as pd
 from sklearn.ensemble import IsolationForest
 from sklearn.model_selection import GridSearchCV
-
-# Internal Modules
 from DataManager import DataManager
-from ReadWriteClass import ReadWrite
+from ReadWriteClass import Reader, Writer
 
 class ModelTrainer():
 
@@ -20,7 +17,7 @@ class ModelTrainer():
             # Create the GridSearchCV object
             grid_search = GridSearchCV(estimator=estimator_dict[name][0], param_grid=estimator_dict[name][1],
                                         scoring=scoring_list, cv=cv_number, refit=refit_method)
-            
+
             # Fit the the best model to the data
             grid_search.fit(data_dict['x'], data_dict['y'])
 
@@ -31,7 +28,6 @@ class ModelTrainer():
 
         # order the dictionary based on the magnitude of the scores
         final_dict = dict(sorted(final_dict.items(), key=lambda item: -1 * item[1]['best_score']))
-        
         return final_dict
    
     def model_trainer(self):
@@ -64,32 +60,31 @@ class ModelTrainer():
         estimator_dict={'IsolationForest': [IsolationForest(), if_param]}
 
         final_dict = self.multiple_grid_search(estimator_dict, scoring_list, 5, 'accuracy', data_dict)
-
-        # Save the model
-        read_write_obj.model_saver(final_dict['IsolationForest']['best_model'], 'if_model.joblib')
-    
         return final_dict
 
-if __name__ == '__main__':
-    from sklearn.metrics import make_scorer, f1_score, accuracy_score
-    read_write_obj = ReadWrite()
-    df = read_write_obj.dataframe_reader('output_path','train_data')
-    print(f'raw dataframe\n{df}')
+def main(df_path, df_name, model_path):
+    reader_obj = Reader()
+    writer_obj = Writer()
 
-    manager_obj = DataManager(df,
+    # Read the raw dataset
+    df = reader_obj.dataframe_reader(df_path, df_name)
+    print(f'raw dataframe\n{df.head()}')
+
+    # transform the raw dataset
+    df_manager_obj = DataManager(df,
                               fill_method='ffill',
                               smoothing_par=None,
                               smoothing_method='exponential',
                               norm_name='min_max')
-    df_trans = manager_obj.dataframe_manager()
-    print(f'processed dataframe\n{df_trans}')
-    y_train = [1 if element=='NORMAL' else -1 for element in df_trans.iloc[:,-1]]
+    df_trans = df_manager_obj.dataframe_manager()
+    print(f'processed dataframe\n{df_trans.head()}')
+
+    # Train a model
     model_trainer_obj = ModelTrainer(df_trans)
-
     model_dict = model_trainer_obj.model_trainer()
-    print(model_dict)
-    y_pred = model_dict['IsolationForest']['best_model'].predict(df_trans.iloc[:,:-1])
-    print(np.unique(y_pred))
-    print(accuracy_score(y_train, y_pred))
 
+    # Save the model
+    writer_obj.model_writer(model_path, model_dict['IsolationForest']['best_model'], 'if_model.joblib')
 
+if __name__ == '__main__':
+    main('divided_data_directory','train_data.csv', 'model_directory')

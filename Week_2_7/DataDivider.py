@@ -1,6 +1,6 @@
 import pandas as pd
 from ConfigReader import ConfigReader
-from ReadWriteClass import ReadWrite
+from ReadWriteClass import Reader, Writer
 
 class DataDivider:
     config = ConfigReader()
@@ -47,10 +47,11 @@ class DataDivider:
 
 
 def main(raw_file_dir, divided_df_dir, file_name):
-    read_write_obj = ReadWrite()
+    reader_obj = Reader()
+    writer_obj = Writer()
 
     # Read the row data
-    df = read_write_obj.dataframe_reader(raw_file_dir, file_name)
+    df = reader_obj.dataframe_reader(raw_file_dir, file_name)
 
     # Divide the dataset
     data_divider_obj = DataDivider(df)
@@ -58,9 +59,7 @@ def main(raw_file_dir, divided_df_dir, file_name):
 
     # save the dataframes
     for name , dataframe in df_dictionary.items():
-        read_write_obj.dataframe_writer(divided_df_dir, dataframe, name)
+        writer_obj.dataframe_writer(divided_df_dir, dataframe, name)
 
-
-    
 if __name__ == '__main__':
     main('raw_file_directory', 'divided_data_directory', 'sensor.csv')

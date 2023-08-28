@@ -1,11 +1,11 @@
 import numpy as np
-from ReadWriteClass import ReadWrite
+from ReadWriteClass import Reader
 
 
 class Model():
 
     def __init__(self, input_dir, model_name):
-        self.model = ReadWrite().model_reader(input_dir, model_name)
+        self.model = Reader().model_reader(input_dir, model_name)
     
     def predict(self, df):
         """

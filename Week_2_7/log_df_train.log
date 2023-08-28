@@ -1,0 +1,14 @@
+2023-08-28 16:24:24,018 Found new data file: df_train.csv
+2023-08-28 16:24:25,523 Loaded the file
+2023-08-28 16:24:35,854 Received transformed data
+2023-08-28 16:24:46,942 Received predicions
+2023-08-28 16:24:46,944 Add predicions to the dataset
+2023-08-28 16:24:47,564 Make a set of evaluation metrics
+2023-08-28 16:24:47,570 Loaded backend agg version v2.2.
+2023-08-28 16:24:47,766 locator: <matplotlib.ticker.AutoLocator object at 0x0000027701572A90>
+2023-08-28 16:24:48,933 saved anomaly_plot.png
+2023-08-28 16:24:49,234 saved cm_plot.png
+2023-08-28 16:24:49,311 saved auc_roc_plot.png
+2023-08-28 16:24:51,850 saved transformed datframe: transformed_df_train.csv
+2023-08-28 16:24:51,852 saved evaluation metrics
+2023-08-28 16:24:51,861 removed raw dataframe: df_train.csv

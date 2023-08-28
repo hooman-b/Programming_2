@@ -1,8 +1,13 @@
+
+import matplotlib
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 class Plotter():
+
+    def __init__(self): 
+        matplotlib.use('agg')
 
     def sensor_anomalies_plotter(self, df, sensor_names, column_name='machine_status',
                                   anomaly_method_name=None):

@@ -8,5 +8,3 @@ raw_file_directory: 'D:\Data Science for Life Science\Machine Learning and Deep 
 sensor_names: ['sensor_04','sensor_12', 'sensor_00', 'sensor_02']
 metric_names: ['precision', 'recall', 'f_score', 'confusion', 'accuracy', 'auc_roc']
 
-output_path: 'D:/Python/data_programming_2/Week_2_7'
-train_data: 'df_train.csv'

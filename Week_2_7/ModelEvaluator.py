@@ -1,5 +1,4 @@
 import numpy as np
-# Metric modules
 from sklearn.metrics import precision_score, recall_score, confusion_matrix, roc_curve, auc
 
 class ModelEvaluator():

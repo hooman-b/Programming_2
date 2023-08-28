@@ -3,11 +3,7 @@ import os
 import yaml
 import numpy as np
 import pandas as pd
-
-# statistical libraries
 from statsmodels.tsa.api import  SimpleExpSmoothing
-
-# Feature Engineering module
 from sklearn.feature_selection import SelectKBest, chi2
 
 class DataManager():

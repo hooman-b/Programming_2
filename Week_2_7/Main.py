@@ -81,14 +81,14 @@ class Main():
             auc_plot = plotter_obj.auc_roc_plotter(evaluation_dict['auc_roc'])
 
             # Save the plots in the output directory
-            df_date = trans_df.index.dt.to_period('M')
-            writer_obj.plot_writer('image_directory', anomaly_plot, f'{df_date[0]}_anomaly_plot.png')
+            df_date = trans_df.index.to_period('M')
+            writer_obj.plot_writer('image_directory', anomaly_plot, f'{df_date[0]}_anomaly_plot_{file_name}.png')
             logger_obj.write_to_logger('saved anomaly_plot.png')
 
-            writer_obj.plot_writer('image_directory', cm_plot, 'cm_plot.png')
+            writer_obj.plot_writer('image_directory', cm_plot, f'{df_date[0]}_cm_plot_{file_name}.png')
             logger_obj.write_to_logger('saved cm_plot.png')
 
-            writer_obj.plot_writer('image_directory', auc_plot, 'auc_roc_plot.png')
+            writer_obj.plot_writer('image_directory', auc_plot, f'{df_date[0]}_auc_roc_plot_{file_name}.png')
             logger_obj.write_to_logger('saved auc_roc_plot.png')
 
             # Save the transformed dataframe
@@ -104,12 +104,16 @@ class Main():
             logger_obj.write_to_logger(f'removed raw dataframe: {file_name}')
 
         except ValueError as error:
-            logger_obj.error_to_logger(f"Value error: {str(error)}")
-            print(f"Value error: {str(error)}")
+            logger_obj.error_to_logger(f'Value error: {str(error)}')
+            print(f'Value error: {str(error)}')
 
         except KeyError as error:
-            logger_obj.error_to_logger(f"Key error: {str(error)}")
-            print(f"Key error: {str(error)}")
+            logger_obj.error_to_logger(f'Key error: {str(error)}')
+            print(f'Key error: {str(error)}')
+
+        except AttributeError as error:
+            logger_obj.error_to_logger(f'Attribute error: {str(error)}')
+            print(f'Attribute error:  {str(error)}')
 
         finally:
             print('precess has finished')

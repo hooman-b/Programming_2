@@ -1,4 +1,3 @@
-import numpy as np
 from sklearn.metrics import precision_score, recall_score, confusion_matrix, roc_curve, auc
 
 class ModelEvaluator():
@@ -16,11 +15,10 @@ class ModelEvaluator():
         Input: 1. y_raw (array-like): The actual labels (ground truth).
                2. y_pred (array-like): The predicted labels.
                3. metric_names (list): List of metric names to calculate.
-        Explanation: Initialize the Normalization object.
+        Explanation: Initialize the ModelEvaluator object.
         """
         self.y_actual = self.y_transformer(y_raw)
         self.y_pred = y_pred
-        print('1:',list(self.y_pred).count(1),'-1:',list( self.y_pred).count(-1), np.unique(self.y_pred))
         self.metric_names = metric_names
 
     def y_transformer(self, y_raw):

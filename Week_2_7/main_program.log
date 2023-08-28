@@ -1,0 +1,58 @@
+2023-08-28 22:42:54,738 Found new data file: df_test1.csv
+2023-08-28 22:42:55,159 Loaded the file
+2023-08-28 22:42:59,153 Received transformed data
+2023-08-28 22:43:01,590 Received predicions
+2023-08-28 22:43:01,590 Add predicions to the dataset
+2023-08-28 22:43:01,816 Make a set of evaluation metrics
+2023-08-28 22:43:01,820 Loaded backend agg version v2.2.
+2023-08-28 22:43:01,995 locator: <matplotlib.ticker.AutoLocator object at 0x000001BABFC3DF70>
+2023-08-28 22:43:02,107 Directory D:\Python\data_programming_2\Week_2_7\output\images has already created
+2023-08-28 22:43:03,364 saved anomaly_plot.png
+2023-08-28 22:43:03,364 Directory D:\Python\data_programming_2\Week_2_7\output\images has already created
+2023-08-28 22:43:03,635 saved cm_plot.png
+2023-08-28 22:43:03,636 Directory D:\Python\data_programming_2\Week_2_7\output\images has already created
+2023-08-28 22:43:03,699 saved auc_roc_plot.png
+2023-08-28 22:43:03,700 Directory D:\Python\data_programming_2\Week_2_7\output has already created
+2023-08-28 22:43:08,101 saved transformed datframe: transformed_df_test1.csv
+2023-08-28 22:43:08,102 Directory D:\Python\data_programming_2\Week_2_7\output has already created
+2023-08-28 22:43:08,102 saved evaluation metrics
+2023-08-28 22:43:08,103 Directory D:\Python\data_programming_2\Week_2_7\target has already created
+2023-08-28 22:43:08,105 removed raw dataframe: df_test1.csv
+2023-08-28 22:44:37,700 Found new data file: df_test2.csv
+2023-08-28 22:44:38,111 Loaded the file
+2023-08-28 22:44:41,848 Received transformed data
+2023-08-28 22:44:44,276 Received predicions
+2023-08-28 22:44:44,276 Add predicions to the dataset
+2023-08-28 22:44:44,483 Make a set of evaluation metrics
+2023-08-28 22:44:44,659 locator: <matplotlib.ticker.AutoLocator object at 0x000001BAC04487F0>
+2023-08-28 22:44:44,764 Directory D:\Python\data_programming_2\Week_2_7\output\images has already created
+2023-08-28 22:44:45,946 saved anomaly_plot.png
+2023-08-28 22:44:45,947 Directory D:\Python\data_programming_2\Week_2_7\output\images has already created
+2023-08-28 22:44:46,049 saved cm_plot.png
+2023-08-28 22:44:46,049 Directory D:\Python\data_programming_2\Week_2_7\output\images has already created
+2023-08-28 22:44:46,113 saved auc_roc_plot.png
+2023-08-28 22:44:46,113 Directory D:\Python\data_programming_2\Week_2_7\output has already created
+2023-08-28 22:44:49,234 saved transformed datframe: transformed_df_test2.csv
+2023-08-28 22:44:49,234 Directory D:\Python\data_programming_2\Week_2_7\output has already created
+2023-08-28 22:44:49,235 saved evaluation metrics
+2023-08-28 22:44:49,235 Directory D:\Python\data_programming_2\Week_2_7\target has already created
+2023-08-28 22:44:49,237 removed raw dataframe: df_test2.csv
+2023-08-28 22:45:16,598 Found new data file: df_train.csv
+2023-08-28 22:45:17,828 Loaded the file
+2023-08-28 22:45:27,604 Received transformed data
+2023-08-28 22:45:35,109 Received predicions
+2023-08-28 22:45:35,110 Add predicions to the dataset
+2023-08-28 22:45:35,692 Make a set of evaluation metrics
+2023-08-28 22:45:35,870 locator: <matplotlib.ticker.AutoLocator object at 0x000001BAC3170F70>
+2023-08-28 22:45:35,974 Directory D:\Python\data_programming_2\Week_2_7\output\images has already created
+2023-08-28 22:45:36,938 saved anomaly_plot.png
+2023-08-28 22:45:36,938 Directory D:\Python\data_programming_2\Week_2_7\output\images has already created
+2023-08-28 22:45:37,037 saved cm_plot.png
+2023-08-28 22:45:37,037 Directory D:\Python\data_programming_2\Week_2_7\output\images has already created
+2023-08-28 22:45:37,102 saved auc_roc_plot.png
+2023-08-28 22:45:37,102 Directory D:\Python\data_programming_2\Week_2_7\output has already created
+2023-08-28 22:45:46,408 saved transformed datframe: transformed_df_train.csv
+2023-08-28 22:45:46,408 Directory D:\Python\data_programming_2\Week_2_7\output has already created
+2023-08-28 22:45:46,408 saved evaluation metrics
+2023-08-28 22:45:46,409 Directory D:\Python\data_programming_2\Week_2_7\target has already created
+2023-08-28 22:45:46,415 removed raw dataframe: df_train.csv

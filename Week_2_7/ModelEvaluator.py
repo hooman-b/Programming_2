@@ -13,8 +13,6 @@ class ModelEvaluator():
     def y_transformer(self, y_raw):
        y_trans = [1 if element=='NORMAL' else -1 for element in y_raw]
        print('1:',y_trans.count(1),'-1:',y_trans.count(-1), np.unique(y_trans))
-       
-       
        return y_trans
 
     def precision(self):

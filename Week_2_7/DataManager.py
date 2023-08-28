@@ -1,55 +1,90 @@
-# General libraries
-import os
-import yaml
 import numpy as np
 import pandas as pd
 from statsmodels.tsa.api import  SimpleExpSmoothing
 from sklearn.feature_selection import SelectKBest, chi2
+from ReadWriteClass import Reader
+from Logger import log
 
-class DataManager():
+class DataManager:
+    """
+    Type: A class for managing data preprocessing and feature engineering.
 
-    def __init__(self, df, fill_method, smoothing_par, smoothing_method, norm_name):
+    Explanation: This class provides methods for preprocessing data, 
+                 including smoothing, normalization, and feature engineering.
+
+    
+    Attributes: 1. df (pandas.DataFrame): The input DataFrame.
+                2. smoothing_par: Parameter for smoothing (depends on smoothing_method).
+                3. smoothing_method (str): The method for data smoothing.
+                4. norm_name (str): The normalization method to use.
+                5. fe_switch (bool): Whether to perform feature engineering.
+    """
+
+    def __init__(self, df, smoothing_par, smoothing_method, norm_name, fe_switch):
+        """
+        Input: 1. df (pandas.DataFrame): The input DataFrame.
+               2. smoothing_par: Parameter for smoothing (depends on smoothing_method).
+               3. smoothing_method (str): The method for data smoothing.
+               4. norm_name (str): The normalization method to use.
+               5. fe_switch (bool): Whether to perform feature engineering.
+        Explanation: Initialize the DataManager object.
+
+        """
         self.df = df
-
-        # Preprocessing parameters
-        self.fill_method = fill_method
         self.smoothing_par = smoothing_par
         self.smoothing_method = smoothing_method
-
-        # Normalization parameters
         self.norm_name = norm_name
+        self.fe_switch = fe_switch
 
     def dataframe_manager(self):
         """
-        This function implements all the preprocessing steps on the dataframe
-        and returns the transformed dataset to the main function.
+        Explanation: Apply preprocessing, normalization feature engineering on
+                     the input DataFrame.
+        output: 1. (pandas.DataFrame): The transformed DataFrame.
         """
         # Preprocessing part
-        preprocessing_obj = Preprocessing(self.df, self.fill_method, self.smoothing_par,
-                                         self.smoothing_method)
+        preprocessing_obj = Preprocessing(self.df, self.smoothing_par, self.smoothing_method)
         self.df = preprocessing_obj.dataframe_smoother()
 
         # Normalization part
-        normalization_obj = Normalization(self.df.iloc[:,:-1], self.norm_name)
-        self.df.iloc[:,:-1] = normalization_obj.method_selector()
+        normalization_obj = Normalization(self.df.iloc[:, :-1], self.norm_name)
+        self.df.iloc[:, :-1] = normalization_obj.method_selector()
 
-        # Feature engineering
-        feature_engineering_obj = FeatureEngineering(self.df)
-        self.df = feature_engineering_obj.dataframe_cropper(12)
+        if self.fe_switch:
+            # Feature engineering
+            feature_engineering_obj = FeatureEngineering(self.df)
+            self.df = feature_engineering_obj.dataframe_cropper(12)
 
         return self.df
 
 class Preprocessing():
+    """
+    Type: A class for data preprocessing.
+    Explanation: This class provides methods for cleaning, pruning, and smoothing a DataFrame.
+    Attributes: 1. smoothing_par: Parameter for smoothing (depends on smoothing_method).
+                2. smoothing_method (str): The method for data smoothing.
+                3. df (pandas.DataFrame): The input DataFrame after cleaning.
+    """
 
-    def __init__(self, df, fill_method, smoothing_par, smoothing_method):
-        self.fill_method = fill_method
+    def __init__(self, df, smoothing_par, smoothing_method):
+        """    
+        Input: 1. df (pandas.DataFrame): The input DataFrame.
+               2. smoothing_par: Parameter for smoothing (depends on smoothing_method).
+               3. smoothing_method (str): The method for data smoothing.
+        Explanation: Initialize the Preprocessing object.
+        """
         self.smoothing_par = smoothing_par
         self.smoothing_method = smoothing_method
-        self.df = self.datframe_cleener(df)
+        self.df = self.datframe_cleaner(df)
 
-    def datframe_cleener(self, df):
+    def datframe_cleaner(self, df):
         """
-        This function prune (drop) the necessary data columns and fill the Nan values
+        Input: 1. df (pandas.DataFrame): The input DataFrame.
+        Explanation: Clean and preprocess the input DataFrame. This function prunes
+                     unnecessary columns, changes the timestamp column to the index,
+                     and fills missing values. 
+        Output: 1. (pandas.DataFrame): The cleaned DataFrame.
+
         """
         # Make a copy of the dataset
         df_processed = df.copy()
@@ -61,16 +96,21 @@ class Preprocessing():
         df_processed.set_index('timestamp', inplace=True)
 
         # Drop redundant columns
-        df_processed.drop(['sensor_15', 'sensor_50', 'sensor_51', 'Unnamed: 0'], inplace = True,axis=1)
+        df_processed.drop(['sensor_15', 'sensor_50', 'sensor_51', 'Unnamed: 0'],
+                           inplace = True,axis=1)
 
         # Fill the null values
-        df_processed.iloc[:,:-1] = df_processed.iloc[:,:-1].fillna(method=self.fill_method)
+        df_processed.iloc[:,:-1] = df_processed.iloc[:,:-1].fillna(method='bfill').fillna(method='ffill')
 
         return df_processed
 
     def dataframe_smoother(self):
         """
-        This function implements a smoothing technique on the dataset
+        Explanation: Apply a smoothing technique on the dataset. This function implements
+                     either rolling mean or exponential smoothing based on the provided
+                     smoothing method.  
+        Output: 1. (pandas.DataFrame): The smoothed DataFrame.
+
         """
         df_copy = self.df.copy()
 
@@ -97,38 +137,50 @@ class Preprocessing():
         return df_copy
 
 class Normalization():
+    """
+    Type: A class for data normalization.
+    Explanation: This class provides methods for normalizing a DataFrame using different techniques.
+    Attributes: 1. df (pandas.DataFrame): The input DataFrame.
+                2. norm_name (str): The normalization method to use.
+    """
 
     def __init__(self, df, norm_name):
+        """
+        Input: 1. df (pandas.DataFrame): The input DataFrame.
+               2. norm_name (str): The normalization method to use.
+        Explanation: Initialize the Normalization object.
+        """
         self.df = df
         self.norm_name = norm_name
 
     def max_normalizer(self): 
         """
-        This function returns 'max' normalization
+        Explanation: Apply 'max' normalization on the DataFrame.
+        Output: (pandas.DataFrame): The normalized DataFrame.
         """
         df_normalized = self.df.apply(lambda x: x / x.abs().max())
         return df_normalized
 
     def min_max_normalizer(self):
         """
-        This function returns 'min_max normalization
+        Explanation: Apply 'min-max' normalization on the DataFrame.
+        Output: (pandas.DataFrame): The normalized DataFrame.
         """
         df_normalized = self.df.apply(lambda x: (x - x.min()) / (x.max() - x.min()))
         return df_normalized
 
     def z_score_normalizer(self):
         """
-        This function returns z-score normalization
+        Explanation: Apply z-score normalization on the DataFrame.
+        Output: (pandas.DataFrame): The normalized DataFrame.
         """
         df_normalized = self.df.apply(lambda x: (x - x.mean()) / x.std())
         return df_normalized
 
     def method_selector(self):
         """
-        input: 1- method_name: this string determines the method's type.
-        explanation: This function chooses the right endmember extraction method based
-                     on the input name. And, return the endmembers based on the method.
-        output: 1- an endmember method
+        Explanation: Choose and apply the appropriate normalization method.
+        Output: (pandas.DataFrame): The normalized DataFrame.
         """
         # make the function name
         method_name = f'{self.norm_name}_normalizer'
@@ -138,14 +190,24 @@ class Normalization():
         return normalization_method()
 
 class FeatureEngineering():
-
+    """
+    Type: A class for feature engineering.
+    Explanation: This class provides methods for performing feature engineering on a DataFrame.
+    Attributes: 1. df (pandas.DataFrame): The input DataFrame.
+                2. selector: The SelectKBest model for feature selection.
+    """
     def __init__(self, df):
+        """
+        Input: 1. df (pandas.DataFrame): The input DataFrame.
+        Explanation: Initialize the FeatureEngineering object.
+        """
         self.df = df
         self.selector = self.feature_engineering()
     
     def making_one_hot(self):
         """
-        This function make one_hot encoder from label column
+        Explanation: Create one-hot encoded labels from the 'machine_status' column.
+        Output: 1. (pandas.DataFrame): The one-hot encoded labels DataFrame.
         """
         # make one hot encoder
         status_series = self.df.machine_status
@@ -155,7 +217,8 @@ class FeatureEngineering():
 
     def feature_engineering(self):
         """
-        This function implements SelectKBest model on the dataset
+        Explanation: Perform feature engineering using SelectKBest model.
+        Output: 1. (sklearn.feature_selection.SelectKBest): The SelectKBest model.
         """
         float_df = self.df.iloc[:,:-1]
 
@@ -170,8 +233,8 @@ class FeatureEngineering():
 
     def score_sorter(self):
         """
-        This function make a sorted dictionary of the columns and their
-        scores in an ascending manner
+        Explanation: Sort feature importance scores in descending order.
+        Output: 1. (dict): A dictionary of columns and their scores.
         """
         rank_dict = {}
         names = self.df.columns
@@ -187,8 +250,9 @@ class FeatureEngineering():
 
     def dataframe_cropper(self, slice_number):
         """
-        This function crops the columns in the dataset with the highest
-        scores in another dataset
+        Input: 1. slice_number (int): The number of columns to keep.
+        Explanation: Crop the dataset to keep columns with the highest scores.
+        Output: 1. (pandas.DataFrame): The cropped DataFrame.
         """
         # make the rank dictionary
         rank_dict = self.score_sorter()
@@ -202,25 +266,32 @@ class FeatureEngineering():
 
         return selected_df
 
-if __name__ == '__main__':
+def test(raw_df_path, df_name):
+    """
+    Input: 1. raw_df_path (str): The path to the directory containing the raw DataFrame.
+           2. df_name (str): The name of the raw DataFrame file.
+    Explanation: Test the different stages of the DataManager class. This function
+                 demonstrates how to use the DataManager class to preprocess a raw
+                 DataFrame through various stages, including smoothing and normalization.
+    """
+    logger_obj = log('data_manager_test.log')
+    reader_obj = Reader(logger_obj)
 
-    with open("config.yaml", "r") as inputFile:
-        config = yaml.safe_load(inputFile)
+    # read a raw dataframe
+    raw_df = reader_obj.dataframe_reader(raw_df_path, df_name)
+    logger_obj.write_to_logger('Loaded the raw file')
 
-    file_directory, file_name,a,b = config.values()
-    os.chdir(a)
-    df = pd.read_csv(b)#.drop('Unnamed: 0', axis=1)
-
-    # change the type of the timestamp column
-    #df['timestamp'] = pd.to_datetime(df['timestamp'])
-
-    # set timestamp column as the index
-    #df.set_index('timestamp', inplace=True)
-    manager_obj = DataManager(df,
-                              fill_method='ffill',
+    # transform the dataframe
+    df_manager_obj = DataManager(raw_df,
                               smoothing_par=None,
                               smoothing_method='exponential',
-                              norm_name='min_max')
-    df_trans = manager_obj.dataframe_manager()
-    print(df_trans.head())
+                              norm_name='min_max',
+                              fe_switch=False)  
+    df_trans = df_manager_obj.dataframe_manager()
+    logger_obj.write_to_logger('Received transformed data')
+
+    logger_obj.write_to_logger(df_trans.head())
+
+if __name__ == '__main__':
+    test('raw_file_directory', 'sensor.csv')
     

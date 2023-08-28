@@ -1,19 +1,38 @@
-
 import matplotlib
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
 class Plotter():
+    """
+    Type: this class is a normal class.
+    Explanation: The Plotter class provides methods for creating various types
+                 of plots commonly used in data analysis and visualization.
+    Methods: 1. sensor_anomalies_plotter: Creates a plot sketching sensor data with broken,
+                recovering, and optionally predicted anomaly parts.
+             2. cm_plotter: Creates a heatmap representation of a confusion matrix.
+             3. auc_roc_plotter: Creates a plot of the ROC curve with AUC information.
+    """
 
-    def __init__(self): 
+    def __init__(self):
+        """
+        Explanation: Initializes a new instance of the Plotter class. I use 'agg' here
+                     to turn off matplotlib font  log explanations.
+        """
         matplotlib.use('agg')
 
     def sensor_anomalies_plotter(self, df, sensor_names, column_name='machine_status',
                                   anomaly_method_name=None):
         """
-        This plot sketch the plot performance, recovery part,
-        broken part, and the prediction part
+        Input: 1. df (pd.DataFrame): The DataFrame containing sensor data.
+               2. sensor_names (list): List of sensor column names.
+               3. column_name (str): Name of the column indicating machine status (default:
+                                     'machine_status').
+               4. anomaly_method_name (str): Name of the column indicating anomaly prediction
+                                             (optional).
+        Explanation: Creates a plot sketching sensor data with broken, recovering, and optionally
+                     predicted anomaly parts.
+        Output: 1. fig: The matplotlib figure object containing the plot.
         """
         # seperate Broken and Recovering values
         broken_rows = df[df[column_name] == 'BROKEN']
@@ -56,7 +75,11 @@ class Plotter():
 
     def cm_plotter(self, cm, logarithm=False):
         """
-        This function draws the confusion matrix in a heatmap
+        Input: 1. cm (np.ndarray): The confusion matrix.
+               2. logarithm (bool): Whether to take the logarithm of the confusion matrix.
+                                    (default: False).
+        Explanation: Creates a heatmap representation of a confusion matrix.
+        Output: 1. fig: The matplotlib figure object containing the plot.
         """
         # use logarithm of confusion matrix if it is large
         if logarithm:
@@ -76,7 +99,10 @@ class Plotter():
 
     def auc_roc_plotter(self, auc_dict):
         """
-        This function draws the auc_roc curve
+        Input: 1. auc_dict (dict): A dictionary containing 'auc', 'false_positive',
+                                   and 'true_positive' values.
+        Explanation: Creates a plot of the ROC curve with AUC information.
+        Output: 1. fig: The matplotlib figure object containing the plot.
         """
         auc = auc_dict['auc']
 

@@ -12,14 +12,31 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 class DataDirectoryWatcher:
+    """
+    Type: This class is a normal class
+    Explanation: The DataDirectoryWatcher class monitors a specified directory for new .csv
+                 files and notifies
+    a provided function when a new file is detected.
+    Attributes: 1. target_dir (str): The directory to watch for new .csv files.
+                2. calling_func (callable): The function to be called when a new .csv 
+                file is detected.
+    """
+
     def __init__(self, target_dir, calling_func):
+        """
+        Input: 1. target_dir (str): The directory to watch for new .csv files.
+               2. calling_func (callable): The function to be called when a new .csv file is
+                                     detected.
+        Explanation: Initializes a new instance of DataDirectoryWatcher.
+        """
         self.target_dir = target_dir
         self.calling_func = calling_func
 
     def start_watching(self):
         """
-        This function is constantly watching the provided directory to 
-        see whether a new .csv file is uploaded there.
+        Explanation: Begins monitoring the target directory for new .csv files. When a new
+                     file is detected, he provided calling_func is invoked.
+        Exception: (KeyboardInterrupt): If the user presses Ctrl-C while monitoring is active.
         """
         # Set up an observer which monitors directory for .csv files 
         # and notifies the handler defined above
@@ -39,12 +56,30 @@ class DataDirectoryWatcher:
         observer.join()
 
 class DataFileHandler(FileSystemEventHandler):
+    """
+    Type: This class is a child class and it inherits from FileSystemEventHandler
+    Explanation: The DataFileHandler class is a file system event handler that
+                 triggers when new files are created in a watched directory. It 
+                 checks if the newly created file is a CSV file and calls a specified
+                 function when a CSV file is detected.
+    Attributes: 1. calling_func (callable): The function to be called when a new CSV 
+                   file is detected.
+    """
     def __init__(self, calling_func):
+        """
+        Input: 1. calling_func (callable): The function to be called when a new CSV
+                  file is detected.
+        Explanation: Initializes a new instance of DataFileHandler.
+        """
         self.calling_func = calling_func
 
     def on_created(self, event):
         """
-        This function determines the condition of the file that should be watched
+        Input: 1. event (FileSystemEvent): The event object representing the file
+                                           creation event.
+        Explanation: A callback method triggered when a new file is created. It checks if
+                     the created file is a CSV file and calls the specified function if the
+                     condition is met.
         """
         # If the event is related to a directory creation, return
         if event.is_directory:

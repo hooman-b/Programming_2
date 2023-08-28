@@ -1,9 +1,10 @@
-target_directory: 'D:\Python\data_programming_2\Week_2_7\target'
-output_directory: 'D:\Python\data_programming_2\Week_2_7\output'
 image_directory: 'D:\Python\data_programming_2\Week_2_7\output\images'
 model_directory: 'D:\Python\data_programming_2\Week_2_7\model'
-divided_data_directory: 'D:\Python\data_programming_2\Week_2_7\divided_data'
+target_directory: 'D:\Python\data_programming_2\Week_2_7\target'
+output_directory: 'D:\Python\data_programming_2\Week_2_7\output'
 raw_file_directory: 'D:\Data Science for Life Science\Machine Learning and Deep learning\Data\Data_week3\pump_sensor_data'
+divided_data_directory: 'D:\Python\data_programming_2\Week_2_7\divided_data'
+
 
 sensor_names: ['sensor_04','sensor_12', 'sensor_00', 'sensor_02']
 metric_names: ['precision', 'recall', 'f_score', 'confusion', 'accuracy', 'auc_roc']

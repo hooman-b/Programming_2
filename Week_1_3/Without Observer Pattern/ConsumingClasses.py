@@ -6,15 +6,23 @@ from Reader import Reader
 from Animation import Animation
 
 class AverageYear():
+    """
+    Explanation: A class for calculating yearly averages from data using a reader.
+    """
     def __init__(self, reader):
+        """
+        Input: reader: The reader instance to retrieve data from.
+        Explanation: Initializes an AverageYear instance.
+        """
         self.reader = reader
         self.average_number = 1
 
-
-
     def temp_average_maker(self):
-        
-
+        """
+        Explanation: Generates yearly average temperature data.
+        Output: (tuple): A tuple containing year average and a list
+                         of average temperatures.
+        """
         while True:
 
             temp_df = pd.read_json(self.reader.get_lines())
@@ -30,13 +38,23 @@ class AverageYear():
             yield year_average, [temp_average]
 
 class AverageMonth():
+    """
+    Explanation: A class for calculating monthly averages from data using a reader.
+    """
     def __init__(self, reader):
+        """
+        Input: reader: The reader instance to retrieve data from.
+        Explanation: Initializes an AverageMonth instance.
+        """
         self.reader = reader
         self.average_number = 8
 
     def temp_average_maker(self):
-
-        # Ask how can you improve this structure
+        """
+        Explanation: Generates monthly average temperature data.
+        Output: (tuple): A tuple containing year average and a Pandas
+                        Series of monthly average temperatures.
+        """
         while True:
 
             temp_df = pd.read_json(self.reader.get_lines())
@@ -52,8 +70,8 @@ class AverageMonth():
             yield year_average, temp_average
 
 if __name__ == "__main__":
-    reader_object = Reader(5)
+    directory = 'D:/Python/data_programming_2/dSST.csv'
+    reader_object = Reader(5, directory)
     Average_year_object = AverageMonth(reader_object)
-
     Animation(Average_year_object)
 

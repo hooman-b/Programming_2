@@ -7,12 +7,17 @@ from random import randint
 import math
 
 class Animation():
+    """
+    Explanation: A class for creating animated plots based on provided data.
+    """
 
     def __init__(self, consuming_class):
-
+        """
+        Input: consuming_class: The consuming class instance providing data for animation.
+        Explanation: Initializes an Animation instance.
+        """
         self.consuming_class = consuming_class
         self.average_number = 0
-#        self.titles = ''
         self.fig, self.axes, self.line = self.subplot_maker()
 
         self.data_dict = self.data_initializer()
@@ -29,8 +34,11 @@ class Animation():
 
         plt.show()
 
-
     def subplot_maker(self):
+        """
+        Explanation: Creates subplots for the animation.
+        Output: (tuple): A tuple containing the figure, axes, and line objects.
+        """
         plot_numbers = self.consuming_class.average_number
         titles_list = self.consuming_class.reader.csv_converter.keys
         print(plot_numbers)
@@ -68,6 +76,10 @@ class Animation():
         return fig, axes, line
 
     def data_initializer(self):
+        """
+        Explanation: Initializes a dictionary to store animation data.
+        Output: (dict): A dictionary containing initialized animation data.
+        """
         data_dict = {}
         data_dict['xdata'] = []
         for number in range(len(self.axes)):
@@ -76,11 +88,19 @@ class Animation():
         return data_dict
 
     def animation_initializer(self):
+        """
+        Explanation: Initializes the animation with initial properties.
+        """
         for ax in self.axes:
             ax.set_ylim(-1., 1.1)
             ax.set_xlim(1880, 1930)
 
     def run(self, data):
+        """
+        Input: data: The data to update the animation with.
+        Explanation: Updates the animation data.
+        Output: (list): A list of line objects.
+        """
         if self.paused:
             # Return the line without updating the data
             return self.line,  
@@ -108,6 +128,9 @@ class Animation():
         return self.line
 
     def toggle_pause(self, *args, **kwargs):
+        """
+        Explanation: Toggles the pause state of the animation.
+        """
         self.paused = not self.paused
         if self.paused:
             self.pause_button.label.set_text('Resume')
@@ -115,6 +138,10 @@ class Animation():
             self.pause_button.label.set_text('Pause')
 
     def color_maker(self):
+        """
+        Explanation: Generates a random color.
+        Output: (str): A random color string.
+        """
         color_list= list(mcolors.TABLEAU_COLORS.keys())
         rand_int1 = randint(0, len(color_list)-1)
         return color_list[rand_int1]

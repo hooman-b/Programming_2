@@ -1,5 +1,4 @@
 """
-Date of final revision: ....
 Explanation: This module contains a class (Atom) that makes an Atom object and returns some
              of its features, and using some rich comparison methods.
 """
@@ -23,18 +22,14 @@ class Atom():
                3- neutron_number (integer): is the number of neutrons.
         explanation: this initializer get the above input and use them to make the initial object.
         """
-
         self.atomic_symbol = atomic_symbol
         self.atomic_number = atomic_number
         self.neutron_number = neutron_number
 
     def __lt__(self, other):
         """
-        type: rich comparison method
         input: 1- other (Atom object): is the Atom object that one wants to compare with the current
                   object.
-        explanation: this function check whether the current Atom object (self) is smaller than the
-                          (other) Atom object.
         output: 1- True/False
         """
 
@@ -44,11 +39,8 @@ class Atom():
 
     def __le__(self, other):
         """
-        type: rich comparison method
         input: 1- other (Atom object): is the Atom object that one wants to compare with the current
                   object.
-        explanation: this function check whether the current Atom object (self) is smaller and equal
-                     than the (other) Atom object.
         output: 1- True/False
         """
         # Check whether these two atom objects are isotopes
@@ -57,83 +49,56 @@ class Atom():
 
     def __gt__(self, other):
         """
-        type: rich comparison method
         input: 1- other (Atom object): is the Atom object that one wants to compare with the current
                   object.
-        explanation: this function check whether the current Atom object (self) is larger than the
-                          (other) Atom object.
         output: 1- True/False
         """
-
         # Check whether these two atom objects are isotopes
         self.isotope_checker(other.atomic_number)
         return self.neutron_number > other.neutron_number
 
     def __ge__(self, other):
         """
-        type: rich comparison method
         input: 1- other (Atom object): is the Atom object that one wants to compare with the current
                   object.
-        explanation: this function check whether the current Atom object (self) is larger and equal
-                     than the (other) Atom object.
         output: 1- True/False
         """
-
         # Check whether these two atom objects are isotopes
         self.isotope_checker(other.atomic_number)
         return self.neutron_number >= other.neutron_number
 
     def __eq__(self, other):
         """
-        type: rich comparison method
         input: 1- other (Atom object): is the Atom object that one wants to compare with the current
                   object.
-        explanation: this function check whether the current Atom object (self) is equal to the 
-                     (other) Atom object.
         output: 1- True/False
         """
-
         # Check whether these two atom objects are isotopes
         self.isotope_checker(other.atomic_number)
         return self.neutron_number == other.neutron_number
 
     def proton_number(self):
         """
-        type: instance method
         explanation: this function returns the number of protons.
-        output: 1- atomic_number: number of protons. 
         """
-
         return self.atomic_number
 
     def mass_number(self):
         """
-        type: instance method
         explanation: this function returns the mass number.
-        output: 1- number of protons plus number of neutrons. 
         """
-
         return self.atomic_number + self.neutron_number
 
     def isotope(self, new_number):
         """
-        type: instance method
-        input: 1- new_number: is a new number for neutrons in an atom.
-        explanation: this function change the number of neutrons to make an isotope for that object.
+        explanation: this function change the number of neutrons to make an isotope
+                     for that object.
         """
-
         self.neutron_number = new_number
 
 
     def isotope_checker(self, proton_number2):
-        # I know that PEP requires you to document all the methods, but personally 
-        # (and more important persons than me) dislike methods whose docstring is 
-        # than the method itself, especially if the method is clear in itself (like 
-        # and setters).
-
         """
-        type: static method
-        input: 1- proton_number2: is the proton number of the first Atom object
         explanation: this function check whether two Atom objects are isotope or raise NotIsotope
                      error.
         """
@@ -156,3 +121,10 @@ if __name__ == "__main__":
     assert deuterium <= tritium
     assert tritium >= protium
     print (oxygen > tritium)
+
+# I know that PEP requires you to document all the methods, but personally 
+# (and more important persons than me) dislike methods whose docstring is 
+# than the method itself, especially if the method is clear in itself (like 
+# and setters).
+# (This is the only comment of this function, I try to erase most of the comments,
+#  and preserve theimportant parts)

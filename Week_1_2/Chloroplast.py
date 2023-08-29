@@ -1,9 +1,22 @@
 """
-Date of final revision: ....
+Problems with the code:
+1-  (solved)    # This is incorrect.
+            # You should have returned new sugar and oxygen molecules. In this case you
+            # just return a list of tuples of strings and numbers.
+
+2- (solved) # get the value of an attribute
+            # This is a rather complex way to increase the 
+            # corresponding value of self.H2O or self.CO2, but ok.
+            # It's nice that you put this inside a try-catch block
+            # so a wrong molecule gets caught directly. 
+            # (**Yes it is complex but I did not use if clause here**)
+
+            # However, with this method I could also increase self.C2H12O6
+            # (**solve this problem**)
+
 Explanation: This module contains a class (Chloroplast) that makes a Chloroplast object and returns
              a list of tuples from the products of the excersize's chemical reaction.
 """
-
 from Molecule import Molecule
 from Atom import Atom
 
@@ -17,19 +30,11 @@ class Chloroplast():
 
     def __init__(self):
         """
-        type: initializer method
         attributes: 1- H2O (integer): number of H2O (water) molecules.
                     2- CO2 (integer): number of CO2 (Carbon Dyoxide) molecules.
-                    3- C6H12O6 (integer): number of C6H12O6 (sugar) molecules.
-                    4- O2 (integer): number of O2 (Oxygen) molecules.
-        explanation: this initializer initializes the object by considering zero as their initial
-                     value.
         """
-
         self.H2O = 0
         self.CO2 = 0
-        self.C6H12O6 = 0
-        self.O2 = 0
 
     def __str__(self):
         """
@@ -42,7 +47,6 @@ class Chloroplast():
 
     def add_molecule(self, molecule):
         """
-        type: instance method
         input: 1- molecule: it is a Molecule object. 
         explanation: this method increments the number of water and co2, and when these numbers
                      reaches to the proper amount call photosyntheses process.
@@ -55,13 +59,6 @@ class Chloroplast():
         # try to find the proper attribute
         try:
 
-            # get the value of an attribute
-            # This is a rather complex way to increase the 
-            # corresponding value of self.H2O or self.CO2, but ok.
-            # It's nice that you put this inside a try-catch block
-            # so a wrong molecule gets caught directly.
-
-            # However, with this method I could also increase self.C2H12O6
             attribute = getattr(self, str(molecule))
             attribute += 1
 
@@ -81,20 +78,16 @@ class Chloroplast():
 
     def photosyntheses(self):
         """
-        type: instance method
         explanation: this method emplements the chemical reation (photosyntheses).
         output: 1- list of products: it contains the number of sugar and oxygen molecules producted
                    in the reaction.
         """
-
         self.H2O -= 12
         self.CO2 -= 6
-        self.C6H12O6 += 1
-        self.O2 += 6
-        # This is incorrect.
-        # You should have returned new sugar and oxygen molecules. In this case you
-        # just return a list of tuples of strings and numbers.
-        return [('C6H12O6', self.C6H12O6), ('O2', self.O2)]
+        C6H12O6 = Molecule([(Atom('C', 6, 6), 6), (Atom('H', 1, 1), 12), (Atom('O', 8, 8), 6)])
+        O2 = Molecule([(Atom('O', 8, 8), 2)])
+
+        return [(str(C6H12O6), 1), (str(O2), 6)]
 
 if __name__ == "__main__":
 

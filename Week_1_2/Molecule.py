@@ -1,5 +1,5 @@
 """
-Date of final revision: ....
+problems: 1- 
 Explanation: This module contains a class (Molecule) that makes an Molecule object and returns
              its chemical formula and adds two chemical formula to each other.
 """
@@ -19,47 +19,39 @@ class Molecule(list):
 
     def __init__(self, atom_list):
         """
-        type: initializer method
         input: 1- atom_list (list): contains a list of tuples, each tuple consists of an Atom object
                                     and the number of them.
         explanation: this initializer get the above input, check the validity of the it, and make
                      the chemical formula of the object.
         """
-
         super().__init__(atom_list)
         self.object_validation_checker()
         self.chemical_formula = self.chemical_formula_maker()
 
     def __str__(self):
         """
-        type: dunder method
         explanation: returns the chemical formula of the molecule.
-        output: 1- chemical_formula: is the chemical formula of an Molecule object.
         """
-
         return self.chemical_formula
 
     def __add__(self, other):
         """
-        type: dunder method
         explanation: it adds two chemical formula strings to each other.
         output: 1- formula: this is a chemical formula of a compound.
         """
-
-        # This is incorrect
+        # This is incorrect (***THIS RETURNS A MOLECULE OBJECT***)
         # The add-method shoud return a new Molecule. In your realisation you
-        # just return a string.
-        formula = self.chemical_formula + other.chemical_formula
-        return formula
+        # just return a string. 
+        combined_atoms = self.copy()
+        combined_atoms.extend(other)
+        return Molecule(combined_atoms)
 
     def object_validation_checker(self):
         """
-        type: instance method
         explanation: this function checks the validity of the atom list. It checks whether the list 
                      values are tuples, their lenghts are equeal to two, the first tuple component 
                      is an Atom object, and the second component is an integer.
         """
-
         for tuple_pair in self:
 
             #  check whether the list values are tuples
@@ -77,23 +69,16 @@ class Molecule(list):
 
     def chemical_formula_maker(self):
         """
-        type: instance method
         explanation: this function creates a chemical formula for a group of Atom objects and
                      their abundance.
         output: 1- chemical_formula: this is a formula based on the Mendeleev symbols.
         """
-        chemical_formula = ''
-
         # add tuples to the chemical_formula string
-        # Could also be done in a list-comprehension...
-        for tuple_pair in self:
-
-            # if the number of atom is not equal to one add its number
-            if tuple_pair[1] != 1:
-                chemical_formula += tuple_pair[0].atomic_symbol + str(tuple_pair[1])
-
-            else:
-                chemical_formula += tuple_pair[0].atomic_symbol
+        # Could also be done in a list-comprehension... (***USING LIST COMPREHENSION***)
+        chemical_formula = ''.join([
+            f'{atom.atomic_symbol}{num}' if num != 1 else atom.atomic_symbol
+            for atom, num in self
+            ])
 
         return chemical_formula
 
@@ -109,4 +94,3 @@ if __name__ == "__main__":
     print (water) # H2O
     print (co2) # CO2
     print (water + co2) # H2OCO2
-    

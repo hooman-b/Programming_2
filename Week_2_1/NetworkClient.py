@@ -4,12 +4,22 @@ import asyncio
 
 
 class NetworkClient:
-    # delay for a specific seconds 
+    """
+    Explanation: A class for managing asynchronous network requests.
+    """
+
     async def delay_maker(self, seconds):
+        """
+        Explanation: Asynchronously delays the execution by the given number of seconds.
+        """
         await asyncio.sleep(seconds)
 
-    #get data from server
     async def get_data(self, url):
+        """
+        Input: url (str): The URL to fetch data from.
+        Explanation: Asynchronously retrieves data from a server URL and prints
+                     the response or error.
+        """
         service_response = requests.get(url)
         if service_response.status_code == 200:
             print(service_response.text)

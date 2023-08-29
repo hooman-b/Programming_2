@@ -27,13 +27,13 @@ handle = Entrez.efetch(db="pubmed",
 print(handle.read())
 ##############################
 
-# method and function names should start with a lower case letter
-def Download(id):
+def download(id):
     handle = Entrez.efetch(db="pubmed",
                            id=id,
                            rettype="text",
                            retmode="xml",
                            api_key='personal_API_key')
+
     with open(f'{id}.xml', 'w') as f:
         f.write(str(handle.read()))
     print(f'{id} is now')
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     # Ok, you're using another method than I asked, but this works in kind of the same manner.
     procsessList = []
     for id in references[:10]:
-        process = Process(target=Download, args=(id,))
+        process = Process(target=download, args=(id,))
         procsessList.append(process)
         process.start()
     for one_process in procsessList:

@@ -40,7 +40,6 @@ def download(id):
 
     # print(handle.read())
 if __name__ == "__main__":
-    # Ok, you're using another method than I asked, but this works in kind of the same manner.
     procsessList = []
     for id in references[:10]:
         process = Process(target=download, args=(id,))

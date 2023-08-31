@@ -128,3 +128,4 @@ if __name__ == "__main__":
 # and setters).
 # (This is the only comment of this function, I try to erase most of the comments,
 #  and preserve theimportant parts)
+# check: creating api-documentation is of course important in itself btw.

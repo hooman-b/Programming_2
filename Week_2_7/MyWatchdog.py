@@ -6,6 +6,8 @@
 # 2. https://snyk.io/advisor/python/watchdog/functions/watchdog.observers
 # 3. https://pythonhosted.org/watchdog/quickstart.html
 
+# The term watchdog already appears in the computers of the Apollo project (I'm not sure whether
+# they coined it, but still).
 import os
 import time
 from watchdog.observers import Observer

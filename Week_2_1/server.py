@@ -43,6 +43,8 @@ class ServerHandler(SimpleHandler):
                 self.send_error(400, "Bad Request")
 
             # Fetch data using DataProvider based on query parameters
+            # much better; however, you could of course use **kwargs in the 
+            # DataProvider. But still.
             result = data_provider.get_data(query_params)
 
             # Send HTTP response with data

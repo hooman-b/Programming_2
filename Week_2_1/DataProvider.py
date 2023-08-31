@@ -65,6 +65,12 @@ class DataProvider:
             if not df.empty:
                 return df.to_json(orient='records')
             else:
+                # when there is no data, you raise a ValueError which results in a 
+                # Status-Code 400. I would argue that this should return a 404 (Not Found)
+                # or perhaps a 204 (No Content).
+                # Now, you are unable to differentiate between bad requests (which should 
+                # result in an error on the client side) and no data (which is not an error
+                # but information).
                 raise ValueError(f"There is no data between year {year_low} and {year_high}")
 
     def get_json(self):

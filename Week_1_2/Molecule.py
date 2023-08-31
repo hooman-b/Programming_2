@@ -68,6 +68,11 @@ class Molecule(list):
             assert isinstance(tuple_pair[0], Atom), NotAtomObject(tuple_pair[0])
 
     def chemical_formula_maker(self):
+        # could be lazy instantiated; now you do this join every time you call the 
+        # __str__; you could also save the string represenation once it is called.
+        # good that you made a lot of small methods, by the way.
+
+
         """
         explanation: this function creates a chemical formula for a group of Atom objects and
                      their abundance.

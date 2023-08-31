@@ -58,7 +58,7 @@ class Chloroplast():
 
         # try to find the proper attribute
         try:
-
+            # nice to do it like this (could be a one-liner, though)
             attribute = getattr(self, str(molecule))
             attribute += 1
 
@@ -72,8 +72,9 @@ class Chloroplast():
             # return empty list
             else:
                 return []
-         # if wrong attribute name is inserted, raise and error
+         # if wrong attribute name is inserted, raise and error <-- you are not raising an error
         except AttributeError:
+            # better to raise an exception here, I would argue
             print('the input value is not H2O or CO2')
 
     def photosyntheses(self):

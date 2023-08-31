@@ -1,3 +1,7 @@
+# very nice to make custom exceptions for these kind of things and
+# to put them in a seperate file
+# One could argue that it is a bit overkill, bit still 😎
+
 class NotIsotope(Exception):
 
     """
